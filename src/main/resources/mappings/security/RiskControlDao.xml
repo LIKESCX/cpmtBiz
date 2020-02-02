@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cpit.cpmt.biz.dao.security.RiskControlDao" >
+  <resultMap id="BaseResultMap" type="com.cpit.cpmt.dto.security.RiskControl" >
+    <id column="risk_id" property="riskId" jdbcType="INTEGER" />
+    <result column="operator_id" property="operatorId" jdbcType="VARCHAR" />
+    <result column="operator_name" property="operatorName" jdbcType="VARCHAR" />
+    <result column="station_id" property="stationId" jdbcType="VARCHAR" />
+    <result column="station_name" property="stationName" jdbcType="VARCHAR" />
+    <result column="equipment_id" property="equipmentId" jdbcType="VARCHAR" />
+    <result column="equipment_name" property="equipmentName" jdbcType="VARCHAR" />
+    <result column="equipment_face_id" property="equipmentFaceId" jdbcType="VARCHAR" />
+    <result column="equipment_face_name" property="equipmentFaceName" jdbcType="VARCHAR" />
+    <result column="area_code" property="areaCode" jdbcType="VARCHAR" />
+    <result column="alarm_level" property="alarmLevel" jdbcType="INTEGER" />
+    <result column="alarm_code" property="alarmCode" jdbcType="VARCHAR" />
+    <result column="alarm_type" property="alarmType" jdbcType="INTEGER" />
+    <result column="alarm_desc" property="alarmDesc" jdbcType="VARCHAR" />
+    <result column="alarm_time" property="alarmTime" jdbcType="TIMESTAMP" />
+    <result column="alarm_status" property="alarmStatus" jdbcType="INTEGER" />
+    <result column="deal_result" property="dealResult" jdbcType="INTEGER" />
+    <result column="deal_step" property="dealStep" jdbcType="VARCHAR" />
+    <result column="deal_time" property="dealTime" jdbcType="TIMESTAMP" />
+    <result column="deal_person" property="dealPerson" jdbcType="VARCHAR" />
+    <result column="affirm" property="affirm" jdbcType="INTEGER" />
+    <result column="affirm_time" property="affirmTime" jdbcType="TIMESTAMP" />
+    <result column="affirm_person" property="affirmPerson" jdbcType="VARCHAR" />
+    <result column="in_time" property="inTime" jdbcType="TIMESTAMP" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    risk_id, operator_id, operator_name, station_id, station_name, equipment_id, equipment_name, 
+    equipment_face_id, equipment_face_name,area_code, alarm_level, alarm_code, alarm_type, alarm_desc, 
+    alarm_time, alarm_status, deal_result, deal_step, deal_time, deal_person, affirm, affirm_time, affirm_person, in_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sec_risk_control
+    where risk_id = #{riskId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sec_risk_control
+    where risk_id = #{riskId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cpit.cpmt.dto.security.RiskControl" >
+    insert into sec_risk_control (risk_id, operator_id, operator_name, 
+      station_id, station_name, equipment_id, 
+      equipment_name,equipment_face_id, 
+      equipment_face_name, area_code, alarm_level, 
+      alarm_code, alarm_type, alarm_desc, 
+      alarm_time, alarm_status, deal_result, 
+      deal_step, deal_time, deal_person, 
+      affirm, affirm_time, affirm_person, 
+      in_time)
+    values (#{riskId,jdbcType=INTEGER}, #{operatorId,jdbcType=VARCHAR}, #{operatorName,jdbcType=VARCHAR}, 
+      #{stationId,jdbcType=VARCHAR}, #{stationName,jdbcType=VARCHAR}, #{equipmentId,jdbcType=VARCHAR},
+      #{equipmentName,jdbcType=VARCHAR},#{equipmentFaceId,jdbcType=VARCHAR}, #{equipmentFaceName,jdbcType=VARCHAR},
+      #{areaCode,jdbcType=VARCHAR}, #{alarmLevel,jdbcType=INTEGER}, 
+      #{alarmCode,jdbcType=VARCHAR}, #{alarmType,jdbcType=INTEGER}, #{alarmDesc,jdbcType=VARCHAR}, 
+      #{alarmTime,jdbcType=TIMESTAMP}, #{alarmStatus,jdbcType=INTEGER}, #{dealResult,jdbcType=INTEGER}, 
+      #{dealStep,jdbcType=VARCHAR}, #{dealTime,jdbcType=TIMESTAMP}, #{dealPerson,jdbcType=VARCHAR}, 
+      #{affirm,jdbcType=INTEGER}, #{affirmTime,jdbcType=TIMESTAMP}, #{affirmPerson,jdbcType=VARCHAR}, 
+      #{inTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cpit.cpmt.dto.security.RiskControl" >
+    insert into sec_risk_control
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        in_time,
+      <if test="riskId != null" >
+        risk_id,
+      </if>
+      <if test="operatorId != null" >
+        operator_id,
+      </if>
+      <if test="operatorName != null" >
+        operator_name,
+      </if>
+      <if test="stationId != null" >
+        station_id,
+      </if>
+      <if test="stationName != null" >
+        station_name,
+      </if>
+      <if test="equipmentId != null" >
+        equipment_id,
+      </if>
+      <if test="equipmentName != null" >
+        equipment_name,
+      </if>
+      <if test="equipmentFaceId != null" >
+        equipment_face_id,
+      </if>
+      <if test="equipmentFaceName != null" >
+        equipment_face_name,
+      </if>
+      <if test="areaCode != null" >
+        area_code,
+      </if>
+      <if test="alarmLevel != null" >
+        alarm_level,
+      </if>
+      <if test="alarmCode != null" >
+        alarm_code,
+      </if>
+      <if test="alarmType != null" >
+        alarm_type,
+      </if>
+      <if test="alarmDesc != null" >
+        alarm_desc,
+      </if>
+      <if test="alarmTime != null" >
+        alarm_time,
+      </if>
+      <if test="alarmStatus != null" >
+        alarm_status,
+      </if>
+      <if test="dealResult != null" >
+        deal_result,
+      </if>
+      <if test="dealStep != null" >
+        deal_step,
+      </if>
+      <if test="dealTime != null" >
+        deal_time,
+      </if>
+      <if test="dealPerson != null" >
+        deal_person,
+      </if>
+      <if test="affirm != null" >
+        affirm,
+      </if>
+      <if test="affirmTime != null" >
+        affirm_time,
+      </if>
+      <if test="affirmPerson != null" >
+        affirm_person,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        NOW(),
+      <if test="riskId != null" >
+        #{riskId,jdbcType=INTEGER},
+      </if>
+      <if test="operatorId != null" >
+        #{operatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorName != null" >
+        #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="stationId != null" >
+        #{stationId,jdbcType=VARCHAR},
+      </if>
+      <if test="stationName != null" >
+        #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentId != null" >
+        #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentName != null" >
+        #{equipmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentFaceId != null" >
+        #{equipmentFaceId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentFaceName != null" >
+        #{equipmentFaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmLevel != null" >
+        #{alarmLevel,jdbcType=INTEGER},
+      </if>
+      <if test="alarmCode != null" >
+        #{alarmCode,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmType != null" >
+        #{alarmType,jdbcType=INTEGER},
+      </if>
+      <if test="alarmDesc != null" >
+        #{alarmDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmTime != null" >
+        #{alarmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alarmStatus != null" >
+        #{alarmStatus,jdbcType=INTEGER},
+      </if>
+      <if test="dealResult != null" >
+        #{dealResult,jdbcType=INTEGER},
+      </if>
+      <if test="dealStep != null" >
+        #{dealStep,jdbcType=VARCHAR},
+      </if>
+      <if test="dealTime != null" >
+        #{dealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dealPerson != null" >
+        #{dealPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="affirm != null" >
+        #{affirm,jdbcType=INTEGER},
+      </if>
+      <if test="affirmTime != null" >
+        #{affirmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="affirmPerson != null" >
+        #{affirmPerson,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cpit.cpmt.dto.security.RiskControl" >
+    update sec_risk_control
+    <set >
+      <if test="operatorId != null" >
+        operator_id = #{operatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorName != null" >
+        operator_name = #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="stationId != null" >
+        station_id = #{stationId,jdbcType=VARCHAR},
+      </if>
+      <if test="stationName != null" >
+        station_name = #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentId != null" >
+        equipment_id = #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentName != null" >
+        equipment_name = #{equipmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentFaceId != null" >
+        equipment_face_id = #{equipmentFaceId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentFaceName != null" >
+        equipment_face_name = #{equipmentFaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmLevel != null" >
+        alarm_level = #{alarmLevel,jdbcType=INTEGER},
+      </if>
+      <if test="alarmCode != null" >
+        alarm_code = #{alarmCode,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmType != null" >
+        alarm_type = #{alarmType,jdbcType=INTEGER},
+      </if>
+      <if test="alarmDesc != null" >
+        alarm_desc = #{alarmDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmTime != null" >
+        alarm_time = #{alarmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alarmStatus != null" >
+        alarm_status = #{alarmStatus,jdbcType=INTEGER},
+      </if>
+      <if test="dealResult != null" >
+        deal_result = #{dealResult,jdbcType=INTEGER},
+      </if>
+      <if test="dealStep != null" >
+        deal_step = #{dealStep,jdbcType=VARCHAR},
+      </if>
+      <if test="dealTime != null" >
+        deal_time = #{dealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dealPerson != null" >
+        deal_person = #{dealPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="affirm != null" >
+        affirm = #{affirm,jdbcType=INTEGER},
+      </if>
+      <if test="affirmTime != null" >
+        affirm_time = #{affirmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="affirmPerson != null" >
+        affirm_person = #{affirmPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="inTime != null" >
+        in_time = #{inTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where risk_id = #{riskId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cpit.cpmt.dto.security.RiskControl" >
+    update sec_risk_control
+    set operator_id = #{operatorId,jdbcType=VARCHAR},
+      operator_name = #{operatorName,jdbcType=VARCHAR},
+      station_id = #{stationId,jdbcType=VARCHAR},
+      station_name = #{stationName,jdbcType=VARCHAR},
+      equipment_id = #{equipmentId,jdbcType=VARCHAR},
+      equipment_name = #{equipmentName,jdbcType=VARCHAR},
+      equipment_face_id = #{equipmentFaceId,jdbcType=VARCHAR},
+      equipment_face_name = #{equipmentFaceName,jdbcType=VARCHAR},
+      area_code = #{areaCode,jdbcType=VARCHAR},
+      alarm_level = #{alarmLevel,jdbcType=INTEGER},
+      alarm_code = #{alarmCode,jdbcType=VARCHAR},
+      alarm_type = #{alarmType,jdbcType=INTEGER},
+      alarm_desc = #{alarmDesc,jdbcType=VARCHAR},
+      alarm_time = #{alarmTime,jdbcType=TIMESTAMP},
+      alarm_status = #{alarmStatus,jdbcType=INTEGER},
+      deal_result = #{dealResult,jdbcType=INTEGER},
+      deal_step = #{dealStep,jdbcType=VARCHAR},
+      deal_time = #{dealTime,jdbcType=TIMESTAMP},
+      deal_person = #{dealPerson,jdbcType=VARCHAR},
+      affirm = #{affirm,jdbcType=INTEGER},
+      affirm_time = #{affirmTime,jdbcType=TIMESTAMP},
+      affirm_person = #{affirmPerson,jdbcType=VARCHAR},
+      in_time = #{inTime,jdbcType=TIMESTAMP}
+    where risk_id = #{riskId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getRiskControlList" resultMap="BaseResultMap" parameterType="com.cpit.cpmt.dto.security.RiskControl">
+    select 
+    <include refid="Base_Column_List" />
+    from sec_risk_control where 1=1
+    <if test="stationStreet!=null and !stationStreet.trim.empty and areaCode!=null  and !areaCode.trim.empty">
+      and station_id in (select  station_id from exc_station_info where exc_station_info.area_code=#{areaCode,jdbcType=VARCHAR} and exc_station_info.station_street=#{stationStreet,jdbcType=VARCHAR})
+    </if>
+    <if test="operatorId != null and operatorId != ''">
+		and operator_id = #{operatorId,jdbcType=VARCHAR}
+	</if>
+	<if test="stationId != null and stationId != ''">
+		and station_id = #{stationId,jdbcType=VARCHAR}
+	</if>
+	<if test="equipmentId != null and equipmentId != ''">
+		and equipment_id = #{equipmentId,jdbcType=VARCHAR}
+	</if>
+	<if test="alarmLevel != null and alarmLevel != ''">
+		and alarm_level = #{alarmLevel,jdbcType=INTEGER}
+	</if>
+	<if test="dealResult != null">
+		and deal_result = #{dealResult,jdbcType=INTEGER}
+	</if>
+	<if test="affirm != null">
+		and affirm = #{affirm,jdbcType=INTEGER}
+	</if>
+	<if test="startTime != null">
+        and in_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="areaList != null and areaList.size()>0"> 
+		and area_code in
+		<foreach collection="areaList" item="area" index="index" open="(" close=")" separator=",">
+			#{area.areaCode}
+		</foreach>
+	</if>
+    order by in_time desc
+  </select>
+  
+  <select id="getCountByLevel" resultMap="BaseResultMap">
+    select alarm_level,count(id) as account from exc_alarm_info where alarm_level in (1,2,3) GROUP BY alarm_level
+  </select>
+  
+  <select id="getCountByType" resultMap="BaseResultMap">
+    select alarm_type,count(id) as account from exc_alarm_info where alarm_type in (1,2,3) GROUP BY alarm_type
+  </select>
+  
+</mapper>

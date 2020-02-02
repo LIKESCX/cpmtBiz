@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cpit.cpmt.biz.dao.monitor.RealTimeAlarmInfoDao" >
+  <resultMap id="RealTimeAlarmResultMap" type="com.cpit.cpmt.dto.exchange.basic.AlarmInfo" >
+    <result column="operator_id" property="operatorID" jdbcType="VARCHAR" />
+    <result column="operator_name" property="operatorName" jdbcType="VARCHAR" />
+    <result column="station_id" property="stationID" jdbcType="VARCHAR" />
+    <result column="station_name" property="stationName" jdbcType="VARCHAR" />
+    <result column="equipment_id" property="equipmentID" jdbcType="VARCHAR" />
+    <result column="equipment_name" property="equipmentName" jdbcType="VARCHAR" />
+    <result column="area_code" property="areaCode" jdbcType="VARCHAR" />
+    <result column="area_name" property="areaName" jdbcType="VARCHAR" />
+	<result column="street_id" property="streetId" jdbcType="VARCHAR" /> 
+	<result column="street_name" property="streetName" jdbcType="VARCHAR" /> 
+    <result column="connector_id" jdbcType="VARCHAR" property="connectorID" />
+    <result column="connector_name" jdbcType="VARCHAR" property="connectorName" />
+    <result column="alarm_status" jdbcType="VARCHAR" property="alarmStatus" />
+    <result column="alarm_code" jdbcType="VARCHAR" property="alarmCode" />
+    <result column="alarm_type" jdbcType="VARCHAR" property="alarmType" />
+    <result column="alarm_level" jdbcType="VARCHAR" property="alarmLevel" />
+    <result column="alarm_time" jdbcType="TIMESTAMP" property="alarmTime" />
+    <result column="alarmSumCount" jdbcType="TIMESTAMP" property="alarmSumCount" /><!-- 外加的统计每个枪的总告警次数 -->
+    <result column="note_string" jdbcType="VARCHAR" property="noteString" />
+    <result column="received_time" jdbcType="TIMESTAMP" property="receivedTime" />
+    <result column="in_time" jdbcType="TIMESTAMP" property="inTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, station_id, operator_id, equipment_owner_id, station_name, equipment_id, connector_id, 
+    alarm_status, alarm_code, alarm_type, alarm_level, alarm_time, note_string, received_time, 
+    in_time
+  </sql>
+  <!-- 充电设施实时AlarmInfo监控列表展示 -->
+  <select id="queryRealTimeAlarmInfoByCondition" parameterType="com.cpit.cpmt.dto.monitor.EquimentMonitorCondition" resultMap="RealTimeAlarmResultMap">
+  SELECT
+  i.operator_id,
+  i.operator_name,
+  h.station_id,
+  h.station_name,
+  h.area_code,
+  IFNULL(k.area_name,'未知') as area_name,
+  IFNULL(j.street_id,'未知') as street_id,
+  IFNULL(j.street_name,'未知') as street_name,
+  g.equipment_id,
+  g.equipment_name,
+  f.connector_id,
+  f.connector_name,
+  c.alarmSumCount,
+  IFNULL(c.alarm_time,date_format('1970-01-01 00:00:00', '%Y-%m-%d %H:%i:%s')) as alarm_time
+  FROM
+   (
+    SELECT
+     y.cid,
+     MAX(a.alarm_time) AS alarm_time,
+     COUNT(a.cid) as alarmSumCount
+    FROM
+     exc_operator_info u
+    LEFT JOIN exc_station_info w ON u.operator_id = w.operator_id
+    LEFT JOIN exc_equipment_info x ON w.sid = x.sid
+    LEFT JOIN exc_connector_info y ON x.eid = y.eid
+    LEFT JOIN exc_alarm_info a ON a.cid = y.cid
+    WHERE
+	1=1 AND y.cid IS NOT NULL AND a.received_time IS NOT NULL
+	<if test="operatorID != null and operatorID!=''">
+       and u.operator_id = #{operatorID}
+    </if>
+	<if test="stationID != null and stationID!=''">
+       and w.station_id=#{stationID}
+    </if>
+	<if test="areaCode != null and areaCode!=''">
+        and w.area_code=#{areaCode}
+    </if>
+	<if test="streetId != null and streetId!=''">
+        and w.station_street=#{streetId}
+    </if>
+	<if test="equipmentID != null and equipmentID !=''">
+        and x.equipment_id=#{equipmentID}
+    </if>
+    	and y.cid is not null
+    GROUP BY
+     y.cid
+   ) c 
+   LEFT JOIN exc_connector_info f ON c.cid = f.cid
+   LEFT JOIN exc_equipment_info g ON f.eid = g.eid
+   LEFT JOIN exc_station_info h ON g.sid = h.sid
+   LEFT JOIN sys_area_street j ON h.area_code = j.area_code and h.station_street= j.street_id
+   LEFT JOIN sys_area_dict k ON j.area_code = k.area_code
+   LEFT JOIN exc_operator_info i ON h.operator_id = i.operator_id
+   ORDER BY alarm_time DESC	
+  </select>
+  <!-- 实时监控详情页面展示告警信息详情 -->
+  <select id="queryAlarmDetailInfosByConditions" resultMap="RealTimeAlarmResultMap">
+  	 select 
+  		 e.operator_name,
+		 c.equipment_name,
+		 b.connector_name,
+		 IFNULL(k.area_name,'未知') as area_name,
+		 IFNULL(j.street_name,'未知') as street_name,
+		 a.station_id,
+		 a.operator_id,
+		 a.equipment_owner_id,
+		 a.station_name,
+		 a.equipment_id,
+		 a.connector_id,
+		 alarm_status,
+		 a.alarm_code,
+		 a.alarm_type,
+		 a.alarm_level,
+		 a.alarm_time,
+		 a.note_string,
+	 	 a.received_time
+     from 
+      exc_alarm_info a 
+	 INNER JOIN exc_connector_info b ON a.cid = b.cid
+	 INNER JOIN exc_equipment_info c ON b.eid = c.eid
+	 INNER JOIN exc_station_info d ON c.sid = d.sid
+	 LEFT JOIN sys_area_dict k ON d.area_code = k.area_code
+	 LEFT JOIN sys_area_street j ON k.area_code = j.area_code 
+     AND d.station_street = j.street_id
+	 INNER JOIN exc_operator_info e ON d.operator_id = e.operator_id
+     WHERE a.operator_id = #{operatorID,jdbcType=VARCHAR} and a.connector_id = #{connectorID,jdbcType=VARCHAR}
+     order by a.received_time desc
+  </select>
+  <!--告警级别、告警次数使用图形展示-->
+  <select id="queryAlarmGraphicDisplayInfoByConditions" resultMap="RealTimeAlarmResultMap">
+   SELECT
+	   alarm_level,
+	   COUNT(alarm_code) alarmCount,
+	   received_time
+	  FROM
+	   exc_alarm_info
+	  WHERE
+	      operator_id = #{operatorID,jdbcType=VARCHAR} 
+	  AND connector_id = #{connectorID,jdbcType=VARCHAR}
+	  <![CDATA[AND received_time > DATE_SUB(NOW(),INTERVAL 60 MINUTE)]]>
+	  GROUP BY
+	   alarm_level,
+	   received_time
+    ORDER BY received_time ASC
+  </select>
+  <select id="queryAlarmSumCountByConditions" resultMap="RealTimeAlarmResultMap">
+   SELECT 
+    a.received_time,
+    SUM(a.alarmCount) AS alarmSumCount
+   FROM 
+    (SELECT
+	   alarm_level,
+	   COUNT(alarm_code) AS alarmCount,
+	   received_time
+	  FROM
+	   exc_alarm_info
+	  WHERE
+	      operator_id = #{operatorID,jdbcType=VARCHAR} 
+	  AND connector_id = #{connectorID,jdbcType=VARCHAR}
+	  <![CDATA[AND received_time > DATE_SUB(NOW(),INTERVAL 60 MINUTE)]]>
+	  GROUP BY
+	   alarm_level,
+	   received_time
+    ORDER BY received_time ASC) a GROUP BY a.received_time;
+  </select>
+</mapper>

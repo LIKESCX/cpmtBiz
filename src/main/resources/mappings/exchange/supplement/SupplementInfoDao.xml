@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cpit.cpmt.biz.dao.exchange.supplement.SupplementInfoDao" >
+  <resultMap id="BaseResultMap" type="com.cpit.cpmt.dto.exchange.supplement.SupplementInfo" >
+     <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="operator_id" property="operatorID" jdbcType="VARCHAR" />
+    <result column="inf_name" property="infName" jdbcType="VARCHAR" />
+    <result column="inf_ver" property="infVer" jdbcType="VARCHAR" />
+    <result column="inf_type" property="infType" jdbcType="VARCHAR" />
+    <result column="original_time" property="originalTime" jdbcType="VARCHAR" />
+    <result column="is_need_supply" property="isNeedSupply" jdbcType="VARCHAR" />
+    <result column="supply_time" property="supplyTime" jdbcType="VARCHAR" />
+    <result column="supply_type" property="supplyType" jdbcType="VARCHAR" />
+    <result column="supply_result" property="supplyResult" jdbcType="VARCHAR" />
+     <result column="supply_fail_reason" property="supplyFailReason" jdbcType="VARCHAR" />
+      <result column="memo1" property="memo1" jdbcType="VARCHAR" />
+       <result column="memo2" property="memo2" jdbcType="VARCHAR" />
+  </resultMap>
+     <insert id="addDto" parameterType ="com.cpit.cpmt.dto.exchange.supplement.SupplementInfo">
+  insert into  exc_supplement_info (id, operator_id,
+  inf_name,
+  inf_ver,
+  inf_type,
+  original_time,
+  is_need_supply,
+  supply_time,
+  supply_type,
+  supply_result,
+  supply_fail_reason,
+  memo1,memo2
+  )values (#{id,jdbcType=INTEGER},
+  #{operatorID,jdbcType=VARCHAR},
+  #{infName,jdbcType=VARCHAR},
+  #{infVer,jdbcType=VARCHAR},
+  #{infType,jdbcType=VARCHAR},
+  #{originalTime,jdbcType=VARCHAR},
+  #{isNeedSupply,jdbcType=VARCHAR},
+  #{supplyTime,jdbcType=VARCHAR},
+  #{supplyType,jdbcType=VARCHAR},
+  #{supplyResult,jdbcType=VARCHAR},
+  #{supplyFailReason,jdbcType=VARCHAR},
+  #{memo1,jdbcType=VARCHAR},
+  #{memo2,jdbcType=VARCHAR}
+  )
+
+  </insert>
+  <select id="search" parameterType ="com.cpit.cpmt.dto.exchange.supplement.SupplementInfo" resultMap="BaseResultMap">
+  select * from exc_supplement_info where
+  operator_id =#{operatorID}
+  and inf_name =#{infName}
+  and original_time between #{startTime} and #{endTime}
+  </select>
+ 
+ 
+</mapper>

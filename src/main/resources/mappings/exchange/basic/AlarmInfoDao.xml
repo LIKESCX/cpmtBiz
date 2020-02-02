@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpit.cpmt.biz.dao.exchange.basic.AlarmInfoDao">
+  <resultMap id="BaseResultMap" type="com.cpit.cpmt.dto.exchange.basic.AlarmInfo">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="station_id" jdbcType="VARCHAR" property="stationID" />
+    <result column="operator_id" jdbcType="VARCHAR" property="operatorID" />
+    <result column="equipment_owner_id" jdbcType="VARCHAR" property="equipmentOwnerID" />
+    <result column="station_name" jdbcType="VARCHAR" property="stationName" />
+    <result column="equipment_id" jdbcType="VARCHAR" property="equipmentID" />
+    <result column="equipment_type" jdbcType="INTEGER" property="equipmentType" />
+    <result column="cid" property="cid" jdbcType="VARCHAR" />
+    <result column="eid" property="eid" jdbcType="VARCHAR" />
+    <result column="connector_id" jdbcType="VARCHAR" property="connectorID" />
+    <result column="alarm_status" jdbcType="VARCHAR" property="alarmStatus" />
+    <result column="alarm_code" jdbcType="VARCHAR" property="alarmCode" />
+    <result column="alarm_type" jdbcType="VARCHAR" property="alarmType" />
+    <result column="alarm_level" jdbcType="VARCHAR" property="alarmLevel" />
+    <result column="alarm_time" jdbcType="TIMESTAMP" property="alarmTime" />
+    <result column="note_string" jdbcType="VARCHAR" property="noteString" />
+    <result column="received_time" jdbcType="TIMESTAMP" property="receivedTime" />
+    <result column="in_time" jdbcType="TIMESTAMP" property="inTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, station_id, operator_id, equipment_owner_id, station_name, equipment_id,equipment_type, connector_id, 
+    alarm_status, alarm_code, alarm_type, alarm_level, alarm_time, note_string, received_time, 
+    in_time
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from exc_alarm_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from exc_alarm_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.cpit.cpmt.dto.exchange.basic.AlarmInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into exc_alarm_info (station_id, operator_id, equipment_owner_id, 
+      station_name, equipment_id, connector_id, 
+      alarm_status, alarm_code, alarm_type, 
+      alarm_level, alarm_time, note_string, 
+      received_time, in_time)
+    values (#{stationId,jdbcType=VARCHAR}, #{operatorId,jdbcType=VARCHAR}, #{equipmentOwnerId,jdbcType=VARCHAR}, 
+      #{stationName,jdbcType=VARCHAR}, #{equipmentId,jdbcType=VARCHAR}, #{connectorId,jdbcType=VARCHAR}, 
+      #{alarmStatus,jdbcType=VARCHAR}, #{alarmCode,jdbcType=VARCHAR}, #{alarmType,jdbcType=VARCHAR}, 
+      #{alarmLevel,jdbcType=VARCHAR}, #{alarmTime,jdbcType=TIMESTAMP}, #{noteString,jdbcType=VARCHAR}, 
+      #{receivedTime,jdbcType=TIMESTAMP}, #{inTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cpit.cpmt.dto.exchange.basic.AlarmInfo">
+    <!-- <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey> -->
+    insert into exc_alarm_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="cid != null">
+        cid,
+      </if>
+      <if test="eid != null">
+        eid,
+      </if>
+      <if test="stationID != null">
+        station_id,
+      </if>
+      <if test="operatorID != null">
+        operator_id,
+      </if>
+      <if test="equipmentOwnerID != null">
+        equipment_owner_id,
+      </if>
+      <if test="stationName != null">
+        station_name,
+      </if>
+      <if test="equipmentID != null">
+        equipment_id,
+      </if>
+      <if test="equipmentType != null">
+        equipment_type,
+      </if>
+      <if test="connectorID != null">
+        connector_id,
+      </if>
+      <if test="alarmStatus != null">
+        alarm_status,
+      </if>
+      <if test="alarmCode != null">
+        alarm_code,
+      </if>
+      <if test="alarmType != null">
+        alarm_type,
+      </if>
+      <if test="alarmLevel != null">
+        alarm_level,
+      </if>
+      <if test="alarmTime != null">
+        alarm_time,
+      </if>
+      <if test="noteString != null">
+        note_string,
+      </if>
+      <if test="receivedTime != null">
+        received_time,
+      </if>
+      <if test="inTime != null">
+        in_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="cid != null">
+        #{cid,jdbcType=VARCHAR},
+      </if>
+      <if test="eid != null">
+        #{eid,jdbcType=VARCHAR},
+      </if>
+      <if test="stationID != null">
+        #{stationID,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorID != null">
+        #{operatorID,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentOwnerID != null">
+        #{equipmentOwnerID,jdbcType=VARCHAR},
+      </if>
+      <if test="stationName != null">
+        #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentID != null">
+        #{equipmentID,jdbcType=VARCHAR},
+      </if>
+       <if test="equipmentType != null">
+        #{equipmentType,jdbcType=INTEGER},
+      </if>
+      <if test="connectorID != null">
+        #{connectorID,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmStatus != null">
+        #{alarmStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmCode != null">
+        #{alarmCode,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmType != null">
+        #{alarmType,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmLevel != null">
+        #{alarmLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmTime != null">
+        #{alarmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="noteString != null">
+        #{noteString,jdbcType=VARCHAR},
+      </if>
+      <if test="receivedTime != null">
+        #{receivedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inTime != null">
+        #{inTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cpit.cpmt.dto.exchange.basic.AlarmInfo">
+    update exc_alarm_info
+    <set>
+      <if test="stationId != null">
+        station_id = #{stationId,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null">
+        operator_id = #{operatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentOwnerId != null">
+        equipment_owner_id = #{equipmentOwnerId,jdbcType=VARCHAR},
+      </if>
+      <if test="stationName != null">
+        station_name = #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentId != null">
+        equipment_id = #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="connectorId != null">
+        connector_id = #{connectorId,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmStatus != null">
+        alarm_status = #{alarmStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmCode != null">
+        alarm_code = #{alarmCode,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmType != null">
+        alarm_type = #{alarmType,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmLevel != null">
+        alarm_level = #{alarmLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmTime != null">
+        alarm_time = #{alarmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="noteString != null">
+        note_string = #{noteString,jdbcType=VARCHAR},
+      </if>
+      <if test="receivedTime != null">
+        received_time = #{receivedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inTime != null">
+        in_time = #{inTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cpit.cpmt.dto.exchange.basic.AlarmInfo">
+    update exc_alarm_info
+    set station_id = #{stationId,jdbcType=VARCHAR},
+      operator_id = #{operatorId,jdbcType=VARCHAR},
+      equipment_owner_id = #{equipmentOwnerId,jdbcType=VARCHAR},
+      station_name = #{stationName,jdbcType=VARCHAR},
+      equipment_id = #{equipmentId,jdbcType=VARCHAR},
+      connector_id = #{connectorId,jdbcType=VARCHAR},
+      alarm_status = #{alarmStatus,jdbcType=VARCHAR},
+      alarm_code = #{alarmCode,jdbcType=VARCHAR},
+      alarm_type = #{alarmType,jdbcType=VARCHAR},
+      alarm_level = #{alarmLevel,jdbcType=VARCHAR},
+      alarm_time = #{alarmTime,jdbcType=TIMESTAMP},
+      note_string = #{noteString,jdbcType=VARCHAR},
+      received_time = #{receivedTime,jdbcType=TIMESTAMP},
+      in_time = #{inTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!-- checkCurrentAlarmValid -->
+  <select id="checkCurrentAlarmValid" parameterType="java.util.Map" resultType="com.cpit.cpmt.dto.exchange.basic.AlarmItem">
+  	select 
+  	    alarm_code as alarmCode,
+  	    alarm_type as alarmType,
+  	    alarm_level as alarmLevel
+  	from exc_alarm_item 
+  	where 
+  		alarm_code = #{params.alarmCode} and alarm_type = #{params.alarmType} and alarm_level = #{params.alarmLevel}
+  </select>
+  
+  <select id="selectStationAlarmLastest" resultType="java.lang.String">
+    select alarm_status from  exc_alarm_info
+    where station_id=#{stationId} and operator_id=#{operatorId}
+    ORDER BY in_time desc LIMIT 1;
+  </select>
+
+  <select id="selectEquipmentAlarm" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from exc_alarm_info
+    where equipment_id=#{equipmentId} and operator_id=#{operatorId}
+  </select>
+</mapper>

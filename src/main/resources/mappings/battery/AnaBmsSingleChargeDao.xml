@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpit.cpmt.biz.dao.battery.AnaBmsSingleChargeDao">
+  <resultMap id="BaseResultMap" type="com.cpit.cpmt.dto.battery.AnaBmsSingleCharge">
+    <id column="bms_code" jdbcType="VARCHAR" property="bmsCode" />
+    <id column="operator_id" jdbcType="VARCHAR" property="operatorId" />
+    <id column="connector_id" jdbcType="VARCHAR" property="connectorId" />
+    <id column="startTime" jdbcType="TIMESTAMP" property="starttime" />
+    <id column="endTime" jdbcType="TIMESTAMP" property="endtime" />
+    <result column="station_id" jdbcType="VARCHAR" property="stationId" />
+    <result column="equipment_id" jdbcType="VARCHAR" property="equipmentId" />
+    <result column="bms_ver" jdbcType="VARCHAR" property="bmsVer" />
+    <result column="esti_r" jdbcType="INTEGER" property="estiR" />
+    <result column="remain_capacity" jdbcType="INTEGER" property="remainCapacity" />
+    <result column="chargeTime" jdbcType="INTEGER" property="chargetime" />
+    <result column="sOH" jdbcType="INTEGER" property="soh" />
+    <result column="remark_1" jdbcType="VARCHAR" property="remark1" />
+    <result column="soc" jdbcType="VARCHAR" property="soc" />
+    <result column="voltage_h" jdbcType="VARCHAR" property="voltageH" />
+    <result column="voltage_l" jdbcType="VARCHAR" property="voltageL" />
+    <result column="tempture_h" jdbcType="VARCHAR" property="temptureH" />
+    <result column="tempture_l" jdbcType="VARCHAR" property="temptureL" />
+    <result column="beforeSoc" jdbcType="VARCHAR" property="beforesoc" />
+    <result column="afterSoc" jdbcType="VARCHAR" property="aftersoc" />
+    <result column="statistical_date" jdbcType="CHAR" property="statisticalDate" />
+    <result column="statistical_month" jdbcType="CHAR" property="statisticalMonth" />
+    <result column="statistical_season" jdbcType="CHAR" property="statisticalSeason" />
+  </resultMap>
+ 	
+</mapper>
