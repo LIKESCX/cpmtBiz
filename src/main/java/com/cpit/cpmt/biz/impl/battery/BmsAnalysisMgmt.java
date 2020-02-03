@@ -1,11 +1,12 @@
 package com.cpit.cpmt.biz.impl.battery;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
@@ -19,143 +20,103 @@ import com.bbap.rest.CountRest;
 import com.bbap.util.CountUtil;
 import com.bbap.util.PmmlUtil;
 import com.cpit.common.TimeConvertor;
-import com.cpit.cpmt.dto.battery.AnaBmsManyChargesDto;
+import com.cpit.cpmt.biz.dao.battery.AnaBmsSingleChargeDao;
+import com.cpit.cpmt.biz.dao.battery.AnaBmsSingleChargeWarningResultDao;
 import com.cpit.cpmt.dto.battery.AnaBmsSingleCharge;
+import com.cpit.cpmt.dto.battery.AnaBmsSingleChargeWarningResult;
 
 @Service
-@Import({CountRest.class,CountUtil.class,PmmlUtil.class})
+@Import({ CountRest.class, CountUtil.class, PmmlUtil.class })
 public class BmsAnalysisMgmt {
+	private final static Logger logger = LoggerFactory.getLogger(BmsAnalysisMgmt.class);
 	@Autowired
 	CountRest countRest;
 	@Autowired
-	AnaBmsSingleChargeMgmt anaBmsSingleChargeMgmt;
-	
-	public void obtainAnalysisAll() {
-		
-		List<BmsInfo> list = new ArrayList<>();
-		Date d = new Date();
-		for (int i = 0; i < 10; i++) {
-		    BmsInfo c = new BmsInfo();//必须用第三方定义的BmsInfo类,不能使用采集的定义的类.
-		    c.setbMSCode("1");
-		    c.setbMSVer("1");
-		    c.setMaxChargeCellVoltage(400 + "");
-		    c.setMaxChargeCurrent(200 + "");
-		    c.setMaxTemp((int) (55) + "");
-		    c.setRatedCapacity(130 + "");
-		    c.setTatalVoltage(200 + Math.random() * 100 + "");
-		    c.setTotalCurrent(Math.random() * 100 + "");
-		    c.setSoc((int) (Math.random() * 100) + "");
-		    c.setVoltageH(3 + Math.random() + "");
-		    c.setVoltageL(2 + Math.random()+ "");
-		    c.setTemptureH((int) (30 + Math.random() * 10) + "");
-		    c.setTemptureL((int) (20 + Math.random() * 10) + "");
-		    c.setStartTime(d);
-		    c.setEndTime(new Date(d.getTime() + 1000 * i));
-		    list.add(c);
-		}
+	AnaBmsSingleChargeDao anaBmsSingleChargeDao;
+	@Autowired
+	AnaBmsSingleChargeWarningResultDao anaBmsSingleChargeWarningResultDao;
+
+	public void obtainAnalysisAll(List<BmsInfo> list, Date recTime) {
+
 		TotalResponse tr;
 		try {
-				tr = countRest.analysisAll(list);
-				BmsAnalysisResult bmsAnalysisResult = tr.getBmsAnalysisResult();//获取分析结果
-				
-				AnaBmsSingleCharge anaBmsSingleCharge = new AnaBmsSingleCharge();
-				//test begin
-				anaBmsSingleCharge.setOperatorId("10086");
-				anaBmsSingleCharge.setStationId("1008601");
-				anaBmsSingleCharge.setEquipmentId("10086001");
-				anaBmsSingleCharge.setConnectorId("100860001");
-				//test end
-				BeanUtils.copyProperties(bmsAnalysisResult, anaBmsSingleCharge);
-				anaBmsSingleChargeMgmt.insertAnaBmsSingleCharge(anaBmsSingleCharge);
-				String newHourTime = TimeConvertor.date2String(anaBmsSingleCharge.getEndtime(),"yyyyMMddHH");
-				//test begin
-				String bMSCode = anaBmsSingleCharge.getBmsCode();
-				String operatorId = anaBmsSingleCharge.getOperatorId();
-				//String stationId = anaBmsSingleCharge.getStationId();
-				//String equipmentId = anaBmsSingleCharge.getEquipmentId();
-				String connectorId = anaBmsSingleCharge.getConnectorId();
-				//test end
-				//更新或插入小时表
-				AnaBmsManyChargesDto anaBmsManyChargesDto = anaBmsSingleChargeMgmt.queryAnaBmsSingleChargeHour(newHourTime,bMSCode,connectorId,operatorId);
-				if(anaBmsManyChargesDto==null) {
-					AnaBmsManyChargesDto anaBmsManyChargesparam = new AnaBmsManyChargesDto();
-					BeanUtils.copyProperties(anaBmsSingleCharge,anaBmsManyChargesparam);
-					anaBmsManyChargesparam.setFlagTime(newHourTime);
-					anaBmsManyChargesparam.setChargeTimes(1);
-					anaBmsSingleChargeMgmt.insertAnaBmsSingleChargeHour(anaBmsManyChargesparam);
-				}else {
-					BeanUtils.copyProperties(anaBmsSingleCharge,anaBmsManyChargesDto);
-					anaBmsManyChargesDto.setChargeTimes(anaBmsManyChargesDto.getChargeTimes()+1);//充电次数加一
-					anaBmsSingleChargeMgmt.updateAnaBmsSingleChargeHour(anaBmsManyChargesDto);
-				}
-				//更新或插入天统计表
-				String dayTime = TimeConvertor.date2String(anaBmsSingleCharge.getEndtime(),"yyyyMMdd");
-				anaBmsManyChargesDto = anaBmsSingleChargeMgmt.queryAnaBmsSingleChargeDay(dayTime,bMSCode,connectorId,operatorId);
-				if(anaBmsManyChargesDto==null) {
-					AnaBmsManyChargesDto anaBmsManyChargesparam = new AnaBmsManyChargesDto();
-					BeanUtils.copyProperties(anaBmsSingleCharge,anaBmsManyChargesparam);
-					anaBmsManyChargesparam.setFlagTime(dayTime);
-					anaBmsManyChargesparam.setChargeTimes(1);
-					anaBmsSingleChargeMgmt.insertAnaBmsSingleChargeDay(anaBmsManyChargesparam);
-				}else {
-					BeanUtils.copyProperties(anaBmsSingleCharge,anaBmsManyChargesDto);
-					anaBmsManyChargesDto.setChargeTimes(anaBmsManyChargesDto.getChargeTimes()+1);//充电次数加一
-					anaBmsSingleChargeMgmt.updateAnaBmsSingleChargeDay(anaBmsManyChargesDto);
-				}
-				//更新或插入周统计表
-				String weekTime = TimeConvertor.date2String(anaBmsSingleCharge.getEndtime(),"yyyyMMdd");
-				String sundayTime = getMonday(weekTime);//返回所在星期的周日
-				anaBmsManyChargesDto = anaBmsSingleChargeMgmt.queryAnaBmsSingleChargeWeek(sundayTime,bMSCode,connectorId,operatorId);
-				if(anaBmsManyChargesDto==null) {
-					AnaBmsManyChargesDto anaBmsManyChargesparam = new AnaBmsManyChargesDto();
-					BeanUtils.copyProperties(anaBmsSingleCharge,anaBmsManyChargesparam);
-					anaBmsManyChargesparam.setFlagTime(sundayTime);
-					anaBmsManyChargesparam.setChargeTimes(1);
-					anaBmsSingleChargeMgmt.insertAnaBmsSingleChargeWeek(anaBmsManyChargesparam);
-				}else {
-					BeanUtils.copyProperties(anaBmsSingleCharge,anaBmsManyChargesDto);
-					anaBmsManyChargesDto.setChargeTimes(anaBmsManyChargesDto.getChargeTimes()+1);//充电次数加一
-					anaBmsSingleChargeMgmt.updateAnaBmsSingleChargeWeek(anaBmsManyChargesDto);
-				}
-				
-				//更新或插入月统计表
-				String monthTime = TimeConvertor.date2String(anaBmsSingleCharge.getEndtime(),"yyyyMM");
-				anaBmsManyChargesDto = anaBmsSingleChargeMgmt.queryAnaBmsSingleChargeMonth(monthTime,bMSCode,connectorId,operatorId);
-				if(anaBmsManyChargesDto==null) {
-					AnaBmsManyChargesDto anaBmsManyChargesparam = new AnaBmsManyChargesDto();
-					BeanUtils.copyProperties(anaBmsSingleCharge,anaBmsManyChargesparam);
-					anaBmsManyChargesparam.setFlagTime(monthTime);
-					anaBmsManyChargesparam.setChargeTimes(1);
-					anaBmsSingleChargeMgmt.insertAnaBmsSingleChargeMonth(anaBmsManyChargesparam);
-				}else {
-					BeanUtils.copyProperties(anaBmsSingleCharge,anaBmsManyChargesDto);
-					anaBmsManyChargesDto.setChargeTimes(anaBmsManyChargesDto.getChargeTimes()+1);//充电次数加一
-					anaBmsSingleChargeMgmt.updateAnaBmsSingleChargeMonth(anaBmsManyChargesDto);
-				}
-				
-				//更新或插入季统计表
-				String seasonTime = getSeasonTime(anaBmsSingleCharge.getEndtime());
-				anaBmsManyChargesDto = anaBmsSingleChargeMgmt.queryAnaBmsSingleChargeSeason(seasonTime,bMSCode,connectorId,operatorId);
-				if(anaBmsManyChargesDto==null) {
-					AnaBmsManyChargesDto anaBmsManyChargesparam = new AnaBmsManyChargesDto();
-					BeanUtils.copyProperties(anaBmsSingleCharge,anaBmsManyChargesparam);
-					anaBmsManyChargesparam.setFlagTime(seasonTime);
-					anaBmsManyChargesparam.setChargeTimes(1);
-					anaBmsSingleChargeMgmt.insertAnaBmsSingleChargeSeason(anaBmsManyChargesparam);
-				}else {
-					BeanUtils.copyProperties(anaBmsSingleCharge,anaBmsManyChargesDto);
-					anaBmsManyChargesDto.setChargeTimes(anaBmsManyChargesDto.getChargeTimes()+1);//充电次数加一
-					anaBmsSingleChargeMgmt.updateAnaBmsSingleChargeSeason(anaBmsManyChargesDto);
-				}
-				
-				
-				List<WarningResult> warningResultList = tr.getWarningResults();//获取告警结果
-				
-			} catch (Exception e) {
-				System.out.println(e);
+			tr = countRest.analysisAll(list);
+			
+			BmsAnalysisResult bmsAnalysisResult = tr.getBmsAnalysisResult();// 获取分析结果
+			//-----打印测试
+			System.out.println("------------打印分析结果-------------");
+			System.out.println("bMSCode="+bmsAnalysisResult.getbMSCode());
+			System.out.println("bMSVer="+bmsAnalysisResult.getbMSVer());
+			System.out.println("voltageH="+bmsAnalysisResult.getVoltageH());
+			System.out.println("voltageL="+bmsAnalysisResult.getVoltageL());
+			System.out.println("afterSoc="+bmsAnalysisResult.getAfterSoc());
+			System.out.println("beforeSoc="+bmsAnalysisResult.getBeforeSoc());
+			System.out.println("chargeTime="+bmsAnalysisResult.getChargeTime());
+			System.out.println("estiR="+bmsAnalysisResult.getEstiR());
+			System.out.println("remainCapacity="+bmsAnalysisResult.getRemainCapacity());
+			System.out.println("soc="+bmsAnalysisResult.getSoc());
+			System.out.println("sOH="+bmsAnalysisResult.getsOH());
+			System.out.println("temptureH="+bmsAnalysisResult.getTemptureH());
+			System.out.println("temptureL="+bmsAnalysisResult.getTemptureL());
+			System.out.println("startTime="+bmsAnalysisResult.getStartTime());
+			System.out.println("endTime="+bmsAnalysisResult.getEndTime());
+			// 调接口
+			// 根据bmsCode和结束充电时间 获取本次充电时的运营商id,站信息id,设备id,设备接口id信息详情
+			// AnaBmsSingleCharge anaBmsSingleCharge =
+			// 服务名.queryBmsInfo(bmsAnalysisResult.getbMSCode(),bmsAnalysisResult.getEndTime());
+			
+			AnaBmsSingleCharge anaBmsSingleCharge = new AnaBmsSingleCharge();
+			// test begin
+			anaBmsSingleCharge.setOperatorId("10086");
+			anaBmsSingleCharge.setStationId("1008601");
+			anaBmsSingleCharge.setEquipmentId("10086001");
+			anaBmsSingleCharge.setConnectorId("100860001");
+			// test end
+			BeanUtils.copyProperties(bmsAnalysisResult, anaBmsSingleCharge);
+
+			Date endTime = bmsAnalysisResult.getEndTime();
+			// 天
+			String statisticalDate = TimeConvertor.date2String(endTime, "yyyyMMdd");
+			// 对应的周日
+			String statisticalWeek = TimeConvertor.date2String(endTime, "yyyyMMdd");
+			statisticalWeek = getMonday(statisticalWeek);// 返回所在星期的周日
+			// 月
+			String statisticalMonth = TimeConvertor.date2String(endTime, "yyyyMM");
+			// 季
+			String statisticalSeason = getSeasonTime(endTime);
+
+			anaBmsSingleCharge.setStatisticalDate(statisticalDate);
+			anaBmsSingleCharge.setStatisticalWeek(statisticalWeek);
+			anaBmsSingleCharge.setStatisticalMonth(statisticalMonth);
+			anaBmsSingleCharge.setStatisticalSeason(statisticalSeason);
+			// 收到的时间此字段待定
+			// 入库的时间此字段待定
+			// 计算后的正常分析结果原始数据入库
+			logger.info("anaBmsSingleCharge"+anaBmsSingleCharge);
+			anaBmsSingleChargeDao.insertSelective(anaBmsSingleCharge);
+			logger.info("anaBmsSingleChargeDao.insertSelective is success");
+
+			// 计算后的正常分析结果原始数据入库
+			List<WarningResult> warningResultList = tr.getWarningResults();// 获取告警结果
+			for (WarningResult warningResult : warningResultList) {
+				AnaBmsSingleChargeWarningResult ascwr = new AnaBmsSingleChargeWarningResult();
+				BeanUtils.copyProperties(warningResult, ascwr);
+				ascwr.setOperatorId(anaBmsSingleCharge.getOperatorId());
+				ascwr.setStationId(anaBmsSingleCharge.getStationId());
+				ascwr.setEquipmentId(anaBmsSingleCharge.getEquipmentId());
+				ascwr.setConnectorId(anaBmsSingleCharge.getConnectorId());
+				ascwr.setStatisticalDate(statisticalDate);
+				ascwr.setStatisticalWeek(statisticalWeek);
+				ascwr.setStatisticalMonth(statisticalMonth);
+				ascwr.setStatisticalSeason(statisticalSeason);
+				anaBmsSingleChargeWarningResultDao.insertSelective(ascwr);
 			}
+			logger.info("anaBmsSingleChargeWarningResultDao.insertSelective is success");
+		} catch (Exception e) {
+			logger.error("obtainAnalysisAll is exception:"+e);
+		}
 	}
-	
+
 	private String getMonday(String date) {
 		if (date == null || date.equals("")) {
 			System.out.println("date is null or empty");
@@ -172,26 +133,26 @@ public class BmsAnalysisMgmt {
 		cal.setTime(d);
 		// set the first day of the week is Monday
 		cal.setFirstDayOfWeek(Calendar.MONDAY);
-		cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);//设置要返回的日期为传入时间对于的周日
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);// 设置要返回的日期为传入时间对于的周日
 		return format.format(cal.getTime());
 	}
-	
-	private  String getSeasonTime(Date date){
+
+	private  String getSeasonTime(Date date) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
-        int month = cal.get(cal.MONTH) + 1;
-        int quarter = 0;
-        //判断季度
-        if (month >= 1 && month <= 3) {
-            quarter = 1;
-        } else if (month >= 4 && month <= 6) {
-            quarter = 2;
-        } else if (month >= 7 && month <= 9) {
-            quarter = 3;
-        } else {
-            quarter = 4;
-        }
-        return TimeConvertor.date2String(date,"yyyy")+"0"+quarter;
-    }
+		int month = cal.get(cal.MONTH) + 1;
+		int quarter = 0;
+		// 判断季度
+		if (month >= 1 && month <= 3) {
+			quarter = 1;
+		} else if (month >= 4 && month <= 6) {
+			quarter = 2;
+		} else if (month >= 7 && month <= 9) {
+			quarter = 3;
+		} else {
+			quarter = 4;
+		}
+		return TimeConvertor.date2String(date, "yyyy") + "0" + quarter;
+	}
 
 }

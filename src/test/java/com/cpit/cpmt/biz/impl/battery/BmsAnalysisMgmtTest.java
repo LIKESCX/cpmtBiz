@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -19,6 +20,7 @@ import com.bbap.rest.CountRest;
 import com.bbap.util.CountUtil;
 import com.bbap.util.PmmlUtil;
 import com.cpit.cpmt.biz.main.Application;
+import com.cpit.cpmt.dto.battery.AnaBmsSingleCharge;
 
 @RunWith(SpringRunner.class)
 @Import({CountRest.class,CountUtil.class,PmmlUtil.class})
@@ -334,4 +336,21 @@ public class BmsAnalysisMgmtTest {
 		startTime=null
 		endTime=null
 */
+	//测试
+	/*@Test
+	public static void main(String[] args) {
+		AnaBmsSingleCharge anaBmsSingleCharge = new AnaBmsSingleCharge();
+		BmsAnalysisResult bmsAnalysisResult = new BmsAnalysisResult();
+		bmsAnalysisResult.setbMSCode("100001");
+		bmsAnalysisResult.setEstiR(30);
+		bmsAnalysisResult.setEndTime(new Date());
+		//test begin
+		anaBmsSingleCharge.setOperatorId("10086");
+		anaBmsSingleCharge.setStationId("1008601");
+		anaBmsSingleCharge.setEquipmentId("10086001");
+		anaBmsSingleCharge.setConnectorId("100860001");
+		//test end
+		BeanUtils.copyProperties(bmsAnalysisResult, anaBmsSingleCharge);
+		System.out.println(anaBmsSingleCharge);
+	}*/
 }

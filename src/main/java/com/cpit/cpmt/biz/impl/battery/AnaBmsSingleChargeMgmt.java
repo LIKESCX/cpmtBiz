@@ -1,14 +1,23 @@
 package com.cpit.cpmt.biz.impl.battery;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bbap.model.WarningResult;
+import com.cpit.cpmt.biz.dao.battery.AnaBmsSingleChargeDao;
 import com.cpit.cpmt.dto.battery.AnaBmsManyChargesDto;
 import com.cpit.cpmt.dto.battery.AnaBmsSingleCharge;
 
 @Service
 public class AnaBmsSingleChargeMgmt {
-
+	@Autowired
+	AnaBmsSingleChargeDao anaBmsSingleChargeDao;
+	//原始计算结果的分析数据入库
 	public void insertAnaBmsSingleCharge(AnaBmsSingleCharge anaBmsSingleCharge) {
+		anaBmsSingleChargeDao.insertSelective(anaBmsSingleCharge);
+	}
+	
+	public void insertSingleChargeWarningResult(WarningResult warningResult) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -93,8 +102,5 @@ public class AnaBmsSingleChargeMgmt {
 		
 	}
 
-	
-
-	
 
 }

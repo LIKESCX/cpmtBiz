@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpit.cpmt.biz.dao.battery.AnaBmsSingleChargeWarningResultDao">
+  <resultMap id="BaseResultMap" type="com.cpit.cpmt.dto.battery.AnaBmsSingleChargeWarningResult">
+    <result column="bms_code" jdbcType="VARCHAR" property="bmsCode" />
+    <result column="operator_id" jdbcType="VARCHAR" property="operatorId" />
+    <result column="connector_id" jdbcType="VARCHAR" property="connectorId" />
+    <result column="startTime" jdbcType="TIMESTAMP" property="starttime" />
+    <result column="endTime" jdbcType="TIMESTAMP" property="endtime" />
+    <result column="station_id" jdbcType="VARCHAR" property="stationId" />
+    <result column="equipment_id" jdbcType="VARCHAR" property="equipmentId" />
+    <result column="bms_ver" jdbcType="VARCHAR" property="bmsVer" />
+    <result column="warning_code" jdbcType="INTEGER" property="warningCode" />
+    <result column="warning_desc" jdbcType="VARCHAR" property="warningDesc" />
+    <result column="warning_level" jdbcType="INTEGER" property="warningLevel" />
+    <result column="statistical_date" jdbcType="CHAR" property="statisticalDate" />
+    <result column="statistical_week" jdbcType="CHAR" property="statisticalWeek" />
+    <result column="statistical_month" jdbcType="CHAR" property="statisticalMonth" />
+    <result column="statistical_season" jdbcType="CHAR" property="statisticalSeason" />
+  </resultMap>
+ 
+  <sql id="Base_Column_List">
+    bms_code, operator_id, connector_id, startTime, endTime, station_id, equipment_id, 
+    bms_ver, warning_code, warning_desc, warning_level, statistical_date, statistical_week, 
+    statistical_month, statistical_season
+  </sql>
+  <insert id="insertSelective" parameterType="com.cpit.cpmt.dto.battery.AnaBmsSingleChargeWarningResult">
+    insert into ana_bms_single_charge_warning_result
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bmsCode != null">
+        bms_code,
+      </if>
+      <if test="operatorId != null">
+        operator_id,
+      </if>
+      <if test="connectorId != null">
+        connector_id,
+      </if>
+      <if test="starttime != null">
+        startTime,
+      </if>
+      <if test="endtime != null">
+        endTime,
+      </if>
+      <if test="stationId != null">
+        station_id,
+      </if>
+      <if test="equipmentId != null">
+        equipment_id,
+      </if>
+      <if test="bmsVer != null">
+        bms_ver,
+      </if>
+      <if test="warningCode != null">
+        warning_code,
+      </if>
+      <if test="warningDesc != null">
+        warning_desc,
+      </if>
+      <if test="warningLevel != null">
+        warning_level,
+      </if>
+      <if test="statisticalDate != null">
+        statistical_date,
+      </if>
+      <if test="statisticalWeek != null">
+        statistical_week,
+      </if>
+      <if test="statisticalMonth != null">
+        statistical_month,
+      </if>
+      <if test="statisticalSeason != null">
+        statistical_season,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bmsCode != null">
+        #{bmsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null">
+        #{operatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="connectorId != null">
+        #{connectorId,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null">
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null">
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stationId != null">
+        #{stationId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentId != null">
+        #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="bmsVer != null">
+        #{bmsVer,jdbcType=VARCHAR},
+      </if>
+      <if test="warningCode != null">
+        #{warningCode,jdbcType=INTEGER},
+      </if>
+      <if test="warningDesc != null">
+        #{warningDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="warningLevel != null">
+        #{warningLevel,jdbcType=INTEGER},
+      </if>
+      <if test="statisticalDate != null">
+        #{statisticalDate,jdbcType=CHAR},
+      </if>
+      <if test="statisticalWeek != null">
+        #{statisticalWeek,jdbcType=CHAR},
+      </if>
+      <if test="statisticalMonth != null">
+        #{statisticalMonth,jdbcType=CHAR},
+      </if>
+      <if test="statisticalSeason != null">
+        #{statisticalSeason,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

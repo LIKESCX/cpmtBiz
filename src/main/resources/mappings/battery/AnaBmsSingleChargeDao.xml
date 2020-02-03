@@ -2,29 +2,187 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cpit.cpmt.biz.dao.battery.AnaBmsSingleChargeDao">
   <resultMap id="BaseResultMap" type="com.cpit.cpmt.dto.battery.AnaBmsSingleCharge">
-    <id column="bms_code" jdbcType="VARCHAR" property="bmsCode" />
+    <id column="bMS_code" jdbcType="VARCHAR" property="bMSCode" />
     <id column="operator_id" jdbcType="VARCHAR" property="operatorId" />
     <id column="connector_id" jdbcType="VARCHAR" property="connectorId" />
-    <id column="startTime" jdbcType="TIMESTAMP" property="starttime" />
-    <id column="endTime" jdbcType="TIMESTAMP" property="endtime" />
+    <id column="startTime" jdbcType="TIMESTAMP" property="startTime" />
+    <id column="endTime" jdbcType="TIMESTAMP" property="endTime" />
     <result column="station_id" jdbcType="VARCHAR" property="stationId" />
     <result column="equipment_id" jdbcType="VARCHAR" property="equipmentId" />
-    <result column="bms_ver" jdbcType="VARCHAR" property="bmsVer" />
+    <result column="bMS_ver" jdbcType="VARCHAR" property="bMSVer" />
     <result column="esti_r" jdbcType="INTEGER" property="estiR" />
     <result column="remain_capacity" jdbcType="INTEGER" property="remainCapacity" />
-    <result column="chargeTime" jdbcType="INTEGER" property="chargetime" />
-    <result column="sOH" jdbcType="INTEGER" property="soh" />
+    <result column="charge_time" jdbcType="INTEGER" property="chargeTime" />
+    <result column="sOH" jdbcType="INTEGER" property="sOH" />
     <result column="remark_1" jdbcType="VARCHAR" property="remark1" />
-    <result column="soc" jdbcType="VARCHAR" property="soc" />
-    <result column="voltage_h" jdbcType="VARCHAR" property="voltageH" />
-    <result column="voltage_l" jdbcType="VARCHAR" property="voltageL" />
-    <result column="tempture_h" jdbcType="VARCHAR" property="temptureH" />
-    <result column="tempture_l" jdbcType="VARCHAR" property="temptureL" />
-    <result column="beforeSoc" jdbcType="VARCHAR" property="beforesoc" />
-    <result column="afterSoc" jdbcType="VARCHAR" property="aftersoc" />
+    <result column="soc" jdbcType="INTEGER" property="soc" />
+    <result column="voltage_h" jdbcType="REAL" property="voltageH" />
+    <result column="voltage_l" jdbcType="REAL" property="voltageL" />
+    <result column="tempture_h" jdbcType="INTEGER" property="temptureH" />
+    <result column="tempture_l" jdbcType="INTEGER" property="temptureL" />
+    <result column="beforeSoc" jdbcType="INTEGER" property="beforeSoc" />
+    <result column="afterSoc" jdbcType="INTEGER" property="afterSoc" />
     <result column="statistical_date" jdbcType="CHAR" property="statisticalDate" />
+    <result column="statistical_week" jdbcType="CHAR" property="statisticalWeek" />
     <result column="statistical_month" jdbcType="CHAR" property="statisticalMonth" />
     <result column="statistical_season" jdbcType="CHAR" property="statisticalSeason" />
   </resultMap>
- 	
+  <sql id="Base_Column_List">
+    bMS_code, operator_id, connector_id, startTime, endTime, station_id, equipment_id, 
+    bMS_ver, esti_r, remain_capacity, charge_time, sOH, remark_1, soc, voltage_h, voltage_l, 
+    tempture_h, tempture_l, beforeSoc, afterSoc, statistical_date, statistical_week, statistical_month, 
+    statistical_season
+  </sql>
+  
+  <insert id="insertSelective" parameterType="com.cpit.cpmt.dto.battery.AnaBmsSingleCharge">
+    insert into ana_bms_single_charge
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bMSCode != null">
+        bMS_code,
+      </if>
+      <if test="operatorId != null">
+        operator_id,
+      </if>
+      <if test="connectorId != null">
+        connector_id,
+      </if>
+      <if test="startTime != null">
+        startTime,
+      </if>
+      <if test="endTime != null">
+        endTime,
+      </if>
+      <if test="stationId != null">
+        station_id,
+      </if>
+      <if test="equipmentId != null">
+        equipment_id,
+      </if>
+      <if test="bMSVer != null">
+        bMS_ver,
+      </if>
+      <if test="estiR != null">
+        esti_r,
+      </if>
+      <if test="remainCapacity != null">
+        remain_capacity,
+      </if>
+      <if test="chargeTime != null">
+        charge_time,
+      </if>
+      <if test="sOH != null">
+        sOH,
+      </if>
+      <if test="remark1 != null">
+        remark_1,
+      </if>
+      <if test="soc != null">
+        soc,
+      </if>
+      <if test="voltageH != null">
+        voltage_h,
+      </if>
+      <if test="voltageL != null">
+        voltage_l,
+      </if>
+      <if test="temptureH != null">
+        tempture_h,
+      </if>
+      <if test="temptureL != null">
+        tempture_l,
+      </if>
+      <if test="beforeSoc != null">
+        beforeSoc,
+      </if>
+      <if test="afterSoc != null">
+        afterSoc,
+      </if>
+      <if test="statisticalDate != null">
+        statistical_date,
+      </if>
+      <if test="statisticalWeek != null">
+        statistical_week,
+      </if>
+      <if test="statisticalMonth != null">
+        statistical_month,
+      </if>
+      <if test="statisticalSeason != null">
+        statistical_season,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bMSCode != null">
+        #{bMSCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null">
+        #{operatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="connectorId != null">
+        #{connectorId,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stationId != null">
+        #{stationId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentId != null">
+        #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="bMSVer != null">
+        #{bMSVer,jdbcType=VARCHAR},
+      </if>
+      <if test="estiR != null">
+        #{estiR,jdbcType=INTEGER},
+      </if>
+      <if test="remainCapacity != null">
+        #{remainCapacity,jdbcType=INTEGER},
+      </if>
+      <if test="chargeTime != null">
+        #{chargeTime,jdbcType=INTEGER},
+      </if>
+      <if test="sOH != null">
+        #{sOH,jdbcType=INTEGER},
+      </if>
+      <if test="remark1 != null">
+        #{remark1,jdbcType=VARCHAR},
+      </if>
+      <if test="soc != null">
+        #{soc,jdbcType=VARCHAR},
+      </if>
+      <if test="voltageH != null">
+        #{voltageH,jdbcType= REAL},
+      </if>
+      <if test="voltageL != null">
+        #{voltageL,jdbcType= REAL},
+      </if>
+      <if test="temptureH != null">
+        #{temptureH,jdbcType=INTEGER},
+      </if>
+      <if test="temptureL != null">
+        #{temptureL,jdbcType=INTEGER},
+      </if>
+      <if test="beforeSoc != null">
+        #{beforeSoc,jdbcType=INTEGER},
+      </if>
+      <if test="afterSoc != null">
+        #{afterSoc,jdbcType=INTEGER},
+      </if>
+      <if test="statisticalDate != null">
+        #{statisticalDate,jdbcType=CHAR},
+      </if>
+      <if test="statisticalWeek != null">
+        #{statisticalWeek,jdbcType=CHAR},
+      </if>
+      <if test="statisticalMonth != null">
+        #{statisticalMonth,jdbcType=CHAR},
+      </if>
+      <if test="statisticalSeason != null">
+        #{statisticalSeason,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
 </mapper>

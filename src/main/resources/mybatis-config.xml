@@ -147,6 +147,10 @@
 		<mapper resource="mappings/measure/ConnectorChargeDao.xml" />
 		<!-- measure end -->
 	    
+	    <!-- battery begin -->
+	    <mapper resource="mappings/battery/AnaBmsSingleChargeDao.xml"/>
+	    <mapper resource="mappings/battery/AnaBmsSingleChargeWarningResultDao.xml"/>
+	    <!-- battery end -->
 	</mappers>
 
 </configuration>
