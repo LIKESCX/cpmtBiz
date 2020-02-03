@@ -2,14 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cpit.cpmt.biz.dao.battery.AnaBmsSingleChargeWarningResultDao">
   <resultMap id="BaseResultMap" type="com.cpit.cpmt.dto.battery.AnaBmsSingleChargeWarningResult">
-    <result column="bms_code" jdbcType="VARCHAR" property="bmsCode" />
+    <result column="bMS_code" jdbcType="VARCHAR" property="bMSCode" />
     <result column="operator_id" jdbcType="VARCHAR" property="operatorId" />
     <result column="connector_id" jdbcType="VARCHAR" property="connectorId" />
-    <result column="startTime" jdbcType="TIMESTAMP" property="starttime" />
-    <result column="endTime" jdbcType="TIMESTAMP" property="endtime" />
+    <result column="startTime" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="endTime" jdbcType="TIMESTAMP" property="endTime" />
     <result column="station_id" jdbcType="VARCHAR" property="stationId" />
     <result column="equipment_id" jdbcType="VARCHAR" property="equipmentId" />
-    <result column="bms_ver" jdbcType="VARCHAR" property="bmsVer" />
+    <result column="bMS_ver" jdbcType="VARCHAR" property="bMSVer" />
     <result column="warning_code" jdbcType="INTEGER" property="warningCode" />
     <result column="warning_desc" jdbcType="VARCHAR" property="warningDesc" />
     <result column="warning_level" jdbcType="INTEGER" property="warningLevel" />
@@ -20,15 +20,15 @@
   </resultMap>
  
   <sql id="Base_Column_List">
-    bms_code, operator_id, connector_id, startTime, endTime, station_id, equipment_id, 
-    bms_ver, warning_code, warning_desc, warning_level, statistical_date, statistical_week, 
+    bMS_code, operator_id, connector_id, startTime, endTime, station_id, equipment_id, 
+    bMS_ver, warning_code, warning_desc, warning_level, statistical_date, statistical_week, 
     statistical_month, statistical_season
   </sql>
   <insert id="insertSelective" parameterType="com.cpit.cpmt.dto.battery.AnaBmsSingleChargeWarningResult">
-    insert into ana_bms_single_charge_warning_result
+    insert into ana_bMS_single_charge_warning_result
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="bmsCode != null">
-        bms_code,
+      <if test="bMSCode != null">
+        bMS_code,
       </if>
       <if test="operatorId != null">
         operator_id,
@@ -36,10 +36,10 @@
       <if test="connectorId != null">
         connector_id,
       </if>
-      <if test="starttime != null">
+      <if test="startTime != null">
         startTime,
       </if>
-      <if test="endtime != null">
+      <if test="endTime != null">
         endTime,
       </if>
       <if test="stationId != null">
@@ -48,8 +48,8 @@
       <if test="equipmentId != null">
         equipment_id,
       </if>
-      <if test="bmsVer != null">
-        bms_ver,
+      <if test="bMSVer != null">
+        bMS_ver,
       </if>
       <if test="warningCode != null">
         warning_code,
@@ -74,8 +74,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="bmsCode != null">
-        #{bmsCode,jdbcType=VARCHAR},
+      <if test="bMSCode != null">
+        #{bMSCode,jdbcType=VARCHAR},
       </if>
       <if test="operatorId != null">
         #{operatorId,jdbcType=VARCHAR},
@@ -83,11 +83,11 @@
       <if test="connectorId != null">
         #{connectorId,jdbcType=VARCHAR},
       </if>
-      <if test="starttime != null">
-        #{starttime,jdbcType=TIMESTAMP},
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="endtime != null">
-        #{endtime,jdbcType=TIMESTAMP},
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="stationId != null">
         #{stationId,jdbcType=VARCHAR},
@@ -95,8 +95,8 @@
       <if test="equipmentId != null">
         #{equipmentId,jdbcType=VARCHAR},
       </if>
-      <if test="bmsVer != null">
-        #{bmsVer,jdbcType=VARCHAR},
+      <if test="bMSVer != null">
+        #{bMSVer,jdbcType=VARCHAR},
       </if>
       <if test="warningCode != null">
         #{warningCode,jdbcType=INTEGER},

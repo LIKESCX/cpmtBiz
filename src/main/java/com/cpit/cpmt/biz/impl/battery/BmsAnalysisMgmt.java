@@ -43,23 +43,7 @@ public class BmsAnalysisMgmt {
 			tr = countRest.analysisAll(list);
 			
 			BmsAnalysisResult bmsAnalysisResult = tr.getBmsAnalysisResult();// 获取分析结果
-			//-----打印测试
-			System.out.println("------------打印分析结果-------------");
-			System.out.println("bMSCode="+bmsAnalysisResult.getbMSCode());
-			System.out.println("bMSVer="+bmsAnalysisResult.getbMSVer());
-			System.out.println("voltageH="+bmsAnalysisResult.getVoltageH());
-			System.out.println("voltageL="+bmsAnalysisResult.getVoltageL());
-			System.out.println("afterSoc="+bmsAnalysisResult.getAfterSoc());
-			System.out.println("beforeSoc="+bmsAnalysisResult.getBeforeSoc());
-			System.out.println("chargeTime="+bmsAnalysisResult.getChargeTime());
-			System.out.println("estiR="+bmsAnalysisResult.getEstiR());
-			System.out.println("remainCapacity="+bmsAnalysisResult.getRemainCapacity());
-			System.out.println("soc="+bmsAnalysisResult.getSoc());
-			System.out.println("sOH="+bmsAnalysisResult.getsOH());
-			System.out.println("temptureH="+bmsAnalysisResult.getTemptureH());
-			System.out.println("temptureL="+bmsAnalysisResult.getTemptureL());
-			System.out.println("startTime="+bmsAnalysisResult.getStartTime());
-			System.out.println("endTime="+bmsAnalysisResult.getEndTime());
+			
 			// 调接口
 			// 根据bmsCode和结束充电时间 获取本次充电时的运营商id,站信息id,设备id,设备接口id信息详情
 			// AnaBmsSingleCharge anaBmsSingleCharge =
@@ -105,6 +89,10 @@ public class BmsAnalysisMgmt {
 				ascwr.setStationId(anaBmsSingleCharge.getStationId());
 				ascwr.setEquipmentId(anaBmsSingleCharge.getEquipmentId());
 				ascwr.setConnectorId(anaBmsSingleCharge.getConnectorId());
+				
+				ascwr.setStartTime(anaBmsSingleCharge.getStartTime());//暂时返回值无
+				ascwr.setEndTime(anaBmsSingleCharge.getEndTime());//暂时返回值无
+				
 				ascwr.setStatisticalDate(statisticalDate);
 				ascwr.setStatisticalWeek(statisticalWeek);
 				ascwr.setStatisticalMonth(statisticalMonth);

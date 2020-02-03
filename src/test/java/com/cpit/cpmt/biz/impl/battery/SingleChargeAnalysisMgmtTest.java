@@ -28,7 +28,7 @@ public class SingleChargeAnalysisMgmtTest {
 	public void obtainAnalysisAll() {
 		List<BmsInfo> list = new ArrayList<>();
 		Date d = new Date();
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 1000; i++) {
 		    BmsInfo c = new BmsInfo();//必须用第三方定义的BmsInfo类,不能使用采集的定义的类.
 		    c.setbMSCode("1");
 		    c.setbMSVer("1");
