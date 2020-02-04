@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpit.cpmt.biz.dao.battery.AnaBmsWeekChargeDao">
+  <resultMap id="BaseResultMap" type="com.cpit.cpmt.dto.battery.AnaBmsWeekCharge">
+    <id column="bms_code" jdbcType="VARCHAR" property="bmsCode" />
+    <id column="operator_id" jdbcType="VARCHAR" property="operatorId" />
+    <id column="connector_id" jdbcType="VARCHAR" property="connectorId" />
+    <id column="statistical_week" jdbcType="CHAR" property="statisticalWeek" />
+    <result column="station_id" jdbcType="VARCHAR" property="stationId" />
+    <result column="equipment_id" jdbcType="VARCHAR" property="equipmentId" />
+    <result column="bms_ver" jdbcType="VARCHAR" property="bmsVer" />
+    <result column="statistics_times" jdbcType="INTEGER" property="statisticsTimes" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    bms_code, operator_id, connector_id, statistical_week, station_id, equipment_id, 
+    bms_ver, statistics_times
+  </sql>
+  
+  <insert id="insertSelective" parameterType="com.cpit.cpmt.dto.battery.AnaBmsWeekCharge">
+    insert into ana_bms_week_charge
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bmsCode != null">
+        bms_code,
+      </if>
+      <if test="operatorId != null">
+        operator_id,
+      </if>
+      <if test="connectorId != null">
+        connector_id,
+      </if>
+      <if test="statisticalWeek != null">
+        statistical_week,
+      </if>
+      <if test="stationId != null">
+        station_id,
+      </if>
+      <if test="equipmentId != null">
+        equipment_id,
+      </if>
+      <if test="bmsVer != null">
+        bms_ver,
+      </if>
+      <if test="statisticsTimes != null">
+        statistics_times,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bmsCode != null">
+        #{bmsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null">
+        #{operatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="connectorId != null">
+        #{connectorId,jdbcType=VARCHAR},
+      </if>
+      <if test="statisticalWeek != null">
+        #{statisticalWeek,jdbcType=CHAR},
+      </if>
+      <if test="stationId != null">
+        #{stationId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentId != null">
+        #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="bmsVer != null">
+        #{bmsVer,jdbcType=VARCHAR},
+      </if>
+      <if test="statisticsTimes != null">
+        #{statisticsTimes,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+ 
+</mapper>

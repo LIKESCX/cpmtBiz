@@ -1,10 +1,14 @@
 package com.cpit.cpmt.biz.impl.battery;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bbap.model.WarningResult;
+import com.cpit.common.db.Page;
 import com.cpit.cpmt.biz.dao.battery.AnaBmsSingleChargeDao;
+import com.cpit.cpmt.dto.battery.AnaBmsDayCharge;
 import com.cpit.cpmt.dto.battery.AnaBmsManyChargesDto;
 import com.cpit.cpmt.dto.battery.AnaBmsSingleCharge;
 
@@ -16,6 +20,12 @@ public class AnaBmsSingleChargeMgmt {
 	public void insertAnaBmsSingleCharge(AnaBmsSingleCharge anaBmsSingleCharge) {
 		anaBmsSingleChargeDao.insertSelective(anaBmsSingleCharge);
 	}
+	
+	//定时任务查询计算后的原始数据
+	public List<AnaBmsDayCharge> querySumAnaBmsSingleDayCharge(String statisticalDate) {
+		return anaBmsSingleChargeDao.selectSumAnaBmsSingleDayCharge(statisticalDate);
+	}
+	
 	
 	public void insertSingleChargeWarningResult(WarningResult warningResult) {
 		// TODO Auto-generated method stub

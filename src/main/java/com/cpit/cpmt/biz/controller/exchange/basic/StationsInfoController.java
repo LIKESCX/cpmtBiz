@@ -102,8 +102,6 @@ public class StationsInfoController {
         	});
         		
         	}
-        	
-        	
             return new ResultInfo(OK, "");
         } catch (Exception ex) {
             logger.error("queryStationsInfo_error", ex);

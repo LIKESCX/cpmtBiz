@@ -27,6 +27,52 @@
     <result column="statistical_month" jdbcType="CHAR" property="statisticalMonth" />
     <result column="statistical_season" jdbcType="CHAR" property="statisticalSeason" />
   </resultMap>
+  
+  <resultMap id="BaseDayResultMap" type="com.cpit.cpmt.dto.battery.AnaBmsDayCharge">
+    <id column="bms_code" jdbcType="VARCHAR" property="bmsCode" />
+    <id column="statistical_day" jdbcType="CHAR" property="statisticalDay" />
+    <result column="operator_id" jdbcType="VARCHAR" property="operatorId" />
+    <result column="station_id" jdbcType="VARCHAR" property="stationId" />
+    <result column="equipment_id" jdbcType="VARCHAR" property="equipmentId" />
+    <result column="connector_id" jdbcType="VARCHAR" property="connectorId" />
+    <result column="bms_ver" jdbcType="VARCHAR" property="bmsVer" />
+    <result column="statistics_times" jdbcType="INTEGER" property="statisticsTimes" />
+  </resultMap>
+  <resultMap id="BaseWeekResultMap" type="com.cpit.cpmt.dto.battery.AnaBmsWeekCharge">
+    <id column="bms_code" jdbcType="VARCHAR" property="bmsCode" />
+    <id column="operator_id" jdbcType="VARCHAR" property="operatorId" />
+    <id column="connector_id" jdbcType="VARCHAR" property="connectorId" />
+    <id column="statistical_week" jdbcType="CHAR" property="statisticalWeek" />
+    <result column="station_id" jdbcType="VARCHAR" property="stationId" />
+    <result column="equipment_id" jdbcType="VARCHAR" property="equipmentId" />
+    <result column="bms_ver" jdbcType="VARCHAR" property="bmsVer" />
+    <result column="statistics_times" jdbcType="INTEGER" property="statisticsTimes" />
+  </resultMap>
+  <resultMap id="BaseMonthResultMap" type="com.cpit.cpmt.dto.battery.AnaBmsMonthCharge">
+    <id column="bms_code" jdbcType="VARCHAR" property="bmsCode" />
+    <id column="operator_id" jdbcType="VARCHAR" property="operatorId" />
+    <id column="connector_id" jdbcType="VARCHAR" property="connectorId" />
+    <id column="statistical_month" jdbcType="CHAR" property="statisticalMonth" />
+    <result column="operator_name" jdbcType="VARCHAR" property="operatorName" />
+    <result column="station_id" jdbcType="VARCHAR" property="stationId" />
+    <result column="equipment_id" jdbcType="VARCHAR" property="equipmentId" />
+    <result column="bms_ver" jdbcType="VARCHAR" property="bmsVer" />
+    <result column="statistics_times" jdbcType="INTEGER" property="statisticsTimes" />
+  </resultMap>
+  
+  <resultMap id="BaseSeasonResultMap" type="com.cpit.cpmt.dto.battery.AnaBmsSeasonCharge">
+    <id column="bms_code" jdbcType="VARCHAR" property="bmsCode" />
+    <id column="operator_id" jdbcType="VARCHAR" property="operatorId" />
+    <id column="connector_id" jdbcType="VARCHAR" property="connectorId" />
+    <id column="statistical_season" jdbcType="CHAR" property="statisticalSeason" />
+    <result column="station_id" jdbcType="VARCHAR" property="stationId" />
+    <result column="equipment_id" jdbcType="VARCHAR" property="equipmentId" />
+    <result column="station_street" jdbcType="VARCHAR" property="stationStreet" />
+    <result column="bms_ver" jdbcType="VARCHAR" property="bmsVer" />
+    <result column="statistics_times" jdbcType="INTEGER" property="statisticsTimes" />
+  </resultMap>
+  
+  
   <sql id="Base_Column_List">
     bMS_code, operator_id, connector_id, startTime, endTime, station_id, equipment_id, 
     bMS_ver, esti_r, remain_capacity, charge_time, sOH, remark_1, soc, voltage_h, voltage_l, 
@@ -185,4 +231,68 @@
       </if>
     </trim>
   </insert>
+  <!-- 汇总日的数据 -->
+  <select id="selectSumAnaBmsSingleDayCharge" resultMap="BaseDayResultMap" parameterType="java.lang.String">
+	SELECT DISTINCT
+		b.bms_code,
+		b.operator_id,
+		b.station_id,
+		b.equipment_id,
+		b.connector_id,
+		a.statistics_times,
+		a.statistical_date as statistical_day
+	FROM
+		(
+			SELECT
+				bms_code,
+				operator_id,
+				connector_id,
+				statistical_date,
+				count(bms_code) AS statistics_times
+			FROM
+				`ana_bms_single_charge`
+			GROUP BY
+				bms_code,
+				statistical_date,
+				operator_id,
+				connector_id
+		) a,
+		ana_bms_single_charge b
+	WHERE
+		a.bms_code = b.bms_code
+	AND a.connector_id = b.connector_id
+	AND a.operator_id = b.operator_id
+  </select>
+  <!-- 汇总周的数据 -->
+  <select id="selectSumAnaBmsSingleWeekCharge" resultMap="BaseWeekResultMap" parameterType="java.lang.String">
+	SELECT DISTINCT
+		b.bms_code,
+		b.operator_id,
+		b.station_id,
+		b.equipment_id,
+		b.connector_id,
+		a.statistics_times,
+		a.statistical_week
+	FROM
+		(
+			SELECT
+				bms_code,
+				operator_id,
+				connector_id,
+				statistical_week,
+				count(bms_code) AS statistics_times
+			FROM
+				`ana_bms_single_charge`
+			GROUP BY
+				bms_code,
+				statistical_week,
+				operator_id,
+				connector_id
+		) a,
+		ana_bms_single_charge b
+	WHERE
+		a.bms_code = b.bms_code
+	AND a.connector_id = b.connector_id
+	AND a.operator_id = b.operator_id
+  </select>
 </mapper>
