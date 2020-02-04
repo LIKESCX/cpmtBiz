@@ -149,6 +149,11 @@
 	    
 	    <!-- battery begin -->
 	    <mapper resource="mappings/battery/AnaBmsSingleChargeDao.xml"/>
+	    <mapper resource="mappings/battery/AnaBmsDayChargeDao.xml"/>
+	    <mapper resource="mappings/battery/AnaBmsWeekChargeDao.xml"/>
+	    <mapper resource="mappings/battery/AnaBmsMonthChargeDao.xml"/>
+	    <mapper resource="mappings/battery/AnaBmsSeasonChargeDao.xml"/>
+	    <mapper resource="mappings/battery/AnaBmsYearChargeDao.xml"/>
 	    <mapper resource="mappings/battery/AnaBmsSingleChargeWarningResultDao.xml"/>
 	    <!-- battery end -->
 	</mappers>

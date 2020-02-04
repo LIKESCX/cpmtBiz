@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cpit.cpmt.biz.dao.exchange.basic.AnaBmsDayChargeDao">
-  <resultMap id="BaseResultMap" type="com.cpit.cpmt.dto.exchange.basic.AnaBmsDayCharge">
+<mapper namespace="com.cpit.cpmt.biz.dao.battery.AnaBmsDayChargeDao">
+  <resultMap id="BaseResultMap" type="com.cpit.cpmt.dto.battery.AnaBmsDayCharge">
     <id column="bms_code" jdbcType="VARCHAR" property="bmsCode" />
     <id column="statistical_day" jdbcType="CHAR" property="statisticalDay" />
     <result column="operator_id" jdbcType="VARCHAR" property="operatorId" />
@@ -17,7 +17,7 @@
     statistics_times
   </sql>
   
-  <insert id="insert" parameterType="com.cpit.cpmt.dto.exchange.basic.AnaBmsDayCharge">
+  <insert id="insert" parameterType="com.cpit.cpmt.dto.battery.AnaBmsDayCharge">
     insert into ana_bms_day_charge (bms_code, statistical_day, operator_id, 
       station_id, equipment_id, connector_id, 
       bms_ver, statistics_times)
@@ -25,7 +25,7 @@
       #{stationId,jdbcType=VARCHAR}, #{equipmentId,jdbcType=VARCHAR}, #{connectorId,jdbcType=VARCHAR}, 
       #{bmsVer,jdbcType=VARCHAR}, #{statisticsTimes,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.cpit.cpmt.dto.exchange.basic.AnaBmsDayCharge">
+  <insert id="insertSelective" parameterType="com.cpit.cpmt.dto.battery.AnaBmsDayCharge">
     insert into ana_bms_day_charge
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="bmsCode != null">

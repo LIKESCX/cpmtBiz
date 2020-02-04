@@ -72,6 +72,17 @@
     <result column="statistics_times" jdbcType="INTEGER" property="statisticsTimes" />
   </resultMap>
   
+  <resultMap id="BaseYearResultMap" type="com.cpit.cpmt.dto.battery.AnaBmsYearCharge">
+    <id column="bms_code" jdbcType="VARCHAR" property="bmsCode" />
+    <id column="operator_id" jdbcType="VARCHAR" property="operatorId" />
+    <id column="connector_id" jdbcType="VARCHAR" property="connectorId" />
+    <id column="statistical_year" jdbcType="CHAR" property="statisticalYear" />
+    <result column="station_id" jdbcType="VARCHAR" property="stationId" />
+    <result column="equipment_id" jdbcType="VARCHAR" property="equipmentId" />
+    <result column="station_street" jdbcType="VARCHAR" property="stationStreet" />
+    <result column="bms_ver" jdbcType="VARCHAR" property="bmsVer" />
+    <result column="statistics_times" jdbcType="INTEGER" property="statisticsTimes" />
+  </resultMap>
   
   <sql id="Base_Column_List">
     bMS_code, operator_id, connector_id, startTime, endTime, station_id, equipment_id, 
@@ -79,7 +90,7 @@
     tempture_h, tempture_l, beforeSoc, afterSoc, statistical_date, statistical_week, statistical_month, 
     statistical_season
   </sql>
-  
+
   <insert id="insertSelective" parameterType="com.cpit.cpmt.dto.battery.AnaBmsSingleCharge">
     insert into ana_bms_single_charge
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -251,6 +262,7 @@
 				count(bms_code) AS statistics_times
 			FROM
 				`ana_bms_single_charge`
+			WHERE statistical_date = #{statisticalDate,jdbcType=CHAR}
 			GROUP BY
 				bms_code,
 				statistical_date,
@@ -283,9 +295,109 @@
 				count(bms_code) AS statistics_times
 			FROM
 				`ana_bms_single_charge`
+			WHERE statistical_week = #{statisticalWeek,jdbcType=CHAR}
 			GROUP BY
 				bms_code,
 				statistical_week,
+				operator_id,
+				connector_id
+		) a,
+		ana_bms_single_charge b
+	WHERE
+		a.bms_code = b.bms_code
+	AND a.connector_id = b.connector_id
+	AND a.operator_id = b.operator_id
+  </select>
+  <!-- 汇总月的数据 -->
+  <select id="selectSumAnaBmsSingleMonthCharge" resultMap="BaseMonthResultMap" parameterType="java.lang.String">
+	SELECT DISTINCT
+		b.bms_code,
+		b.operator_id,
+		b.station_id,
+		b.equipment_id,
+		b.connector_id,
+		a.statistics_times,
+		a.statistical_month
+	FROM
+		(
+			SELECT
+				bms_code,
+				operator_id,
+				connector_id,
+				statistical_month,
+				count(bms_code) AS statistics_times
+			FROM
+				`ana_bms_single_charge`
+			WHERE statistical_month = #{statisticalMonth,jdbcType=CHAR}
+			GROUP BY
+				bms_code,
+				statistical_month,
+				operator_id,
+				connector_id
+		) a,
+		ana_bms_single_charge b
+	WHERE
+		a.bms_code = b.bms_code
+	AND a.connector_id = b.connector_id
+	AND a.operator_id = b.operator_id
+  </select>
+  <!-- 汇总季的数据 -->
+  <select id="selectSumAnaBmsSingleSeasonCharge" resultMap="BaseSeasonResultMap" parameterType="java.lang.String">
+	SELECT DISTINCT
+		b.bms_code,
+		b.operator_id,
+		b.station_id,
+		b.equipment_id,
+		b.connector_id,
+		a.statistics_times,
+		a.statistical_season
+	FROM
+		(
+			SELECT
+				bms_code,
+				operator_id,
+				connector_id,
+				statistical_season,
+				count(bms_code) AS statistics_times
+			FROM
+				`ana_bms_single_charge`
+			WHERE statistical_season = #{statisticalSeason,jdbcType=CHAR}
+			GROUP BY
+				bms_code,
+				statistical_season,
+				operator_id,
+				connector_id
+		) a,
+		ana_bms_single_charge b
+	WHERE
+		a.bms_code = b.bms_code
+	AND a.connector_id = b.connector_id
+	AND a.operator_id = b.operator_id
+  </select>
+  <!-- 汇总年的数据 -->
+  <select id="selectSumAnaBmsSingleYearCharge" resultMap="BaseSeasonResultMap" parameterType="java.lang.String">
+	SELECT DISTINCT
+		b.bms_code,
+		b.operator_id,
+		b.station_id,
+		b.equipment_id,
+		b.connector_id,
+		a.statistics_times,
+		a.statistical_year
+	FROM
+		(
+			SELECT
+				bms_code,
+				operator_id,
+				connector_id,
+				statistical_year,
+				count(bms_code) AS statistics_times
+			FROM
+				`ana_bms_single_charge`
+			WHERE statistical_year = #{statisticalYear,jdbcType=CHAR}
+			GROUP BY
+				bms_code,
+				statistical_year,
 				operator_id,
 				connector_id
 		) a,

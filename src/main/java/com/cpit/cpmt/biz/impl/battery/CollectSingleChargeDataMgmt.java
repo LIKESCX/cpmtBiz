@@ -27,7 +27,7 @@ public class CollectSingleChargeDataMgmt {
 	@Autowired
 	BmsAnalysisMgmt bmsAnalysisMgmt;
 	//接收完整一次的充电过程数据
-	@RabbitListener(queues = "exc-single-charge")
+	//@RabbitListener(queues = "exc-single-charge")
 	public void CollectSingleChargeData(Message message) {
 		Object _reportMsg = null;
 		InputStream input = new ByteArrayInputStream(message.getBody());

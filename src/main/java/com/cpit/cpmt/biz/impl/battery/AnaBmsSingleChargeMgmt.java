@@ -10,7 +10,11 @@ import com.cpit.common.db.Page;
 import com.cpit.cpmt.biz.dao.battery.AnaBmsSingleChargeDao;
 import com.cpit.cpmt.dto.battery.AnaBmsDayCharge;
 import com.cpit.cpmt.dto.battery.AnaBmsManyChargesDto;
+import com.cpit.cpmt.dto.battery.AnaBmsMonthCharge;
+import com.cpit.cpmt.dto.battery.AnaBmsSeasonCharge;
 import com.cpit.cpmt.dto.battery.AnaBmsSingleCharge;
+import com.cpit.cpmt.dto.battery.AnaBmsWeekCharge;
+import com.cpit.cpmt.dto.battery.AnaBmsYearCharge;
 
 @Service
 public class AnaBmsSingleChargeMgmt {
@@ -21,9 +25,25 @@ public class AnaBmsSingleChargeMgmt {
 		anaBmsSingleChargeDao.insertSelective(anaBmsSingleCharge);
 	}
 	
-	//定时任务查询计算后的原始数据
+	//天 定时任务查询计算后的原始数据
 	public List<AnaBmsDayCharge> querySumAnaBmsSingleDayCharge(String statisticalDate) {
 		return anaBmsSingleChargeDao.selectSumAnaBmsSingleDayCharge(statisticalDate);
+	}
+	//周 定时任务查询计算后的原始数据
+	public List<AnaBmsWeekCharge> querySumAnaBmsSingleWeekCharge(String statisticalWeek) {
+		return anaBmsSingleChargeDao.selectSumAnaBmsSingleWeekCharge(statisticalWeek);
+	}
+	//月 定时任务查询计算后的原始数据
+	public List<AnaBmsMonthCharge> querySumAnaBmsSingleMonthCharge(String statisticalMonth) {
+		return anaBmsSingleChargeDao.selectSumAnaBmsSingleMonthCharge(statisticalMonth);
+	}
+	//季 定时任务查询计算后的原始数据
+	public List<AnaBmsSeasonCharge> querySumAnaBmsSingleSeasonCharge(String statisticalSeason) {
+		return anaBmsSingleChargeDao.selectSumAnaBmsSingleSeasonCharge(statisticalSeason);
+	}
+	//年 定时任务查询计算后的原始数据
+	public List<AnaBmsYearCharge> querySumAnaBmsSingleYearCharge(String statisticalYear) {
+		return anaBmsSingleChargeDao.selectSumAnaBmsSingleYearCharge(statisticalYear);
 	}
 	
 	
@@ -112,5 +132,5 @@ public class AnaBmsSingleChargeMgmt {
 		
 	}
 
-
+	
 }
