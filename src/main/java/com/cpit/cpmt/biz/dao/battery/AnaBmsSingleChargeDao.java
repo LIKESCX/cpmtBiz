@@ -5,6 +5,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.cpit.common.MyBatisDao;
+import com.cpit.cpmt.dto.battery.AnaBatteryMonthBasicInformation;
+import com.cpit.cpmt.dto.battery.AnaBatteryMonthHistoricalOperationAnalysis;
+import com.cpit.cpmt.dto.battery.AnaBatteryMonthPerformanceHistoryAnalysis;
 import com.cpit.cpmt.dto.battery.AnaBmsDayCharge;
 import com.cpit.cpmt.dto.battery.AnaBmsMonthCharge;
 import com.cpit.cpmt.dto.battery.AnaBmsSeasonCharge;
@@ -34,6 +37,12 @@ public interface AnaBmsSingleChargeDao {
 	public List<AnaBmsSingleCharge> querySecondLevelData(@Param("param")BatteryDataTrackingAssessmentConditions param);
 	//第三级钻取数据
 	public List<AnaBmsSingleCharge> queryThirdLevelData(@Param("param")BatteryDataTrackingAssessmentConditions param);
+	//获取月报告基本信息
+	public AnaBatteryMonthBasicInformation queryMonthBasicInformation(@Param("bmsCode")String bmsCode,@Param("statisticalMonth")String statisticalMonth);
+	//获取月报告电池性能历史分析
+	public List<AnaBatteryMonthPerformanceHistoryAnalysis> queryMonthPerformanceHistoryAnalysis(@Param("bmsCode")String bmsCode,@Param("statisticalMonth")String statisticalMonth);
+	//获取月报告电池运行情况历史分析
+	public List<AnaBatteryMonthHistoricalOperationAnalysis> queryMonthHistoricalOperationAnalysis(@Param("bmsCode")String bmsCode,@Param("statisticalMonth")String statisticalMonth);
 	
 	
 }

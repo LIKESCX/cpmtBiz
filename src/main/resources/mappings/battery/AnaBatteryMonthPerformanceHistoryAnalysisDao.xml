@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpit.cpmt.biz.dao.battery.AnaBatteryMonthPerformanceHistoryAnalysisDao">
+  <resultMap id="BaseResultMap" type="com.cpit.cpmt.dto.battery.AnaBatteryMonthPerformanceHistoryAnalysis">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="bms_code" jdbcType="VARCHAR" property="bmsCode" />
+    <result column="bms_ver" jdbcType="VARCHAR" property="bmsVer" />
+    <result column="history_sOH" jdbcType="INTEGER" property="historySoh" />
+    <result column="history_remain_capacity" jdbcType="INTEGER" property="historyRemainCapacity" />
+    <result column="statistical_day" jdbcType="CHAR" property="statisticalDay" />
+    <result column="statistical_month" jdbcType="CHAR" property="statisticalMonth" />
+  </resultMap>
+ <!--  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, bms_code, bms_ver, history_sOH, history_remain_capacity, statistical_day, statistical_month
+  </sql>
+  <select id="selectByExample" parameterType="com.cpit.cpmt.dto.exchange.basic.AnaBatteryMonthPerformanceHistoryAnalysisExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ana_battery_month_performance_history_analysis
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ana_battery_month_performance_history_analysis
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ana_battery_month_performance_history_analysis
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.cpit.cpmt.dto.exchange.basic.AnaBatteryMonthPerformanceHistoryAnalysisExample">
+    delete from ana_battery_month_performance_history_analysis
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.cpit.cpmt.dto.exchange.basic.AnaBatteryMonthPerformanceHistoryAnalysis">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ana_battery_month_performance_history_analysis (bms_code, bms_ver, history_sOH, 
+      history_remain_capacity, statistical_day, statistical_month
+      )
+    values (#{bmsCode,jdbcType=VARCHAR}, #{bmsVer,jdbcType=VARCHAR}, #{historySoh,jdbcType=INTEGER}, 
+      #{historyRemainCapacity,jdbcType=INTEGER}, #{statisticalDay,jdbcType=CHAR}, #{statisticalMonth,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cpit.cpmt.dto.exchange.basic.AnaBatteryMonthPerformanceHistoryAnalysis">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ana_battery_month_performance_history_analysis
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bmsCode != null">
+        bms_code,
+      </if>
+      <if test="bmsVer != null">
+        bms_ver,
+      </if>
+      <if test="historySoh != null">
+        history_sOH,
+      </if>
+      <if test="historyRemainCapacity != null">
+        history_remain_capacity,
+      </if>
+      <if test="statisticalDay != null">
+        statistical_day,
+      </if>
+      <if test="statisticalMonth != null">
+        statistical_month,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bmsCode != null">
+        #{bmsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bmsVer != null">
+        #{bmsVer,jdbcType=VARCHAR},
+      </if>
+      <if test="historySoh != null">
+        #{historySoh,jdbcType=INTEGER},
+      </if>
+      <if test="historyRemainCapacity != null">
+        #{historyRemainCapacity,jdbcType=INTEGER},
+      </if>
+      <if test="statisticalDay != null">
+        #{statisticalDay,jdbcType=CHAR},
+      </if>
+      <if test="statisticalMonth != null">
+        #{statisticalMonth,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.cpit.cpmt.dto.exchange.basic.AnaBatteryMonthPerformanceHistoryAnalysisExample" resultType="java.lang.Long">
+    select count(*) from ana_battery_month_performance_history_analysis
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update ana_battery_month_performance_history_analysis
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.bmsCode != null">
+        bms_code = #{record.bmsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bmsVer != null">
+        bms_ver = #{record.bmsVer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.historySoh != null">
+        history_sOH = #{record.historySoh,jdbcType=INTEGER},
+      </if>
+      <if test="record.historyRemainCapacity != null">
+        history_remain_capacity = #{record.historyRemainCapacity,jdbcType=INTEGER},
+      </if>
+      <if test="record.statisticalDay != null">
+        statistical_day = #{record.statisticalDay,jdbcType=CHAR},
+      </if>
+      <if test="record.statisticalMonth != null">
+        statistical_month = #{record.statisticalMonth,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update ana_battery_month_performance_history_analysis
+    set id = #{record.id,jdbcType=INTEGER},
+      bms_code = #{record.bmsCode,jdbcType=VARCHAR},
+      bms_ver = #{record.bmsVer,jdbcType=VARCHAR},
+      history_sOH = #{record.historySoh,jdbcType=INTEGER},
+      history_remain_capacity = #{record.historyRemainCapacity,jdbcType=INTEGER},
+      statistical_day = #{record.statisticalDay,jdbcType=CHAR},
+      statistical_month = #{record.statisticalMonth,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cpit.cpmt.dto.exchange.basic.AnaBatteryMonthPerformanceHistoryAnalysis">
+    update ana_battery_month_performance_history_analysis
+    <set>
+      <if test="bmsCode != null">
+        bms_code = #{bmsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bmsVer != null">
+        bms_ver = #{bmsVer,jdbcType=VARCHAR},
+      </if>
+      <if test="historySoh != null">
+        history_sOH = #{historySoh,jdbcType=INTEGER},
+      </if>
+      <if test="historyRemainCapacity != null">
+        history_remain_capacity = #{historyRemainCapacity,jdbcType=INTEGER},
+      </if>
+      <if test="statisticalDay != null">
+        statistical_day = #{statisticalDay,jdbcType=CHAR},
+      </if>
+      <if test="statisticalMonth != null">
+        statistical_month = #{statisticalMonth,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cpit.cpmt.dto.exchange.basic.AnaBatteryMonthPerformanceHistoryAnalysis">
+    update ana_battery_month_performance_history_analysis
+    set bms_code = #{bmsCode,jdbcType=VARCHAR},
+      bms_ver = #{bmsVer,jdbcType=VARCHAR},
+      history_sOH = #{historySoh,jdbcType=INTEGER},
+      history_remain_capacity = #{historyRemainCapacity,jdbcType=INTEGER},
+      statistical_day = #{statisticalDay,jdbcType=CHAR},
+      statistical_month = #{statisticalMonth,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update> -->
+</mapper>

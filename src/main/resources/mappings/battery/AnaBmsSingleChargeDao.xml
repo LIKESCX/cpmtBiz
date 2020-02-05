@@ -86,6 +86,48 @@
     <result column="statistics_times" jdbcType="INTEGER" property="statisticsTimes" />
   </resultMap>
   
+  <resultMap id="BaseMonthBasicInformationResultMap" type="com.cpit.cpmt.dto.battery.AnaBatteryMonthBasicInformation">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="bms_code" jdbcType="VARCHAR" property="bmsCode" />
+    <result column="bms_ver" jdbcType="VARCHAR" property="bmsVer" />
+    <result column="vehicle_use" jdbcType="VARCHAR" property="vehicleUse" />
+    <result column="rated_capacity" jdbcType="VARCHAR" property="ratedCapacity" />
+    <result column="rated_voltage" jdbcType="VARCHAR" property="ratedVoltage" />
+    <result column="comprehensive_assessment" jdbcType="VARCHAR" property="comprehensiveAssessment" />
+    <result column="sOH" jdbcType="INTEGER" property="sOH" />
+    <result column="remain_capacity" jdbcType="INTEGER" property="remainCapacity" />
+    <result column="esti_r" jdbcType="INTEGER" property="estiR" />
+    <result column="statistical_month" jdbcType="CHAR" property="statisticalMonth" />
+  </resultMap>
+  
+  <resultMap id="BaseMonthPerformanceHistoryAnalysisResultMap" type="com.cpit.cpmt.dto.battery.AnaBatteryMonthPerformanceHistoryAnalysis">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="bms_code" jdbcType="VARCHAR" property="bmsCode" />
+    <result column="bms_ver" jdbcType="VARCHAR" property="bmsVer" />
+    <result column="history_sOH" jdbcType="INTEGER" property="historySoh" />
+    <result column="history_remain_capacity" jdbcType="INTEGER" property="historyRemainCapacity" />
+    <result column="statistical_day" jdbcType="CHAR" property="statisticalDay" />
+    <result column="statistical_month" jdbcType="CHAR" property="statisticalMonth" />
+  </resultMap>
+  
+  <resultMap id="BaseMonthHistoricalOperationAnalysisResultMap" type="com.cpit.cpmt.dto.battery.AnaBatteryMonthHistoricalOperationAnalysis">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="bms_code" jdbcType="VARCHAR" property="bmsCode" />
+    <result column="bms_ver" jdbcType="VARCHAR" property="bmsVer" />
+    <result column="history_times" jdbcType="INTEGER" property="historyTimes" />
+    <result column="history_charge_time" jdbcType="INTEGER" property="historyChargeTime" />
+    <result column="history_max_charge_time" jdbcType="INTEGER" property="historyMaxChargeTime" />
+    <result column="history_min_charge_time" jdbcType="INTEGER" property="historyMinChargeTime" />
+    <result column="max_charging_voltage" jdbcType="REAL" property="maxChargingVoltage" />
+    <result column="max_charging_current" jdbcType="REAL" property="maxChargingCurrent" />
+    <result column="history_voltage_h" jdbcType="REAL" property="historyVoltageH" />
+    <result column="history_voltage_l" jdbcType="REAL" property="historyVoltageL" />
+    <result column="history_tempture_h" jdbcType="INTEGER" property="historyTemptureH" />
+    <result column="history_tempture_l" jdbcType="VARCHAR" property="historyTemptureL" />
+    <result column="statistical_day" jdbcType="CHAR" property="statisticalDay" />
+    <result column="statistical_month" jdbcType="CHAR" property="statisticalMonth" />
+  </resultMap>
+  
   <sql id="Base_Column_List">
     bMS_code, operator_id, connector_id, startTime, endTime, station_id, equipment_id, 
     bMS_ver, esti_r, remain_capacity, charge_time, sOH, remark_1, soc, voltage_h, voltage_l, 
@@ -492,6 +534,55 @@
         AND bMS_code = #{param.bMSCode,jdbcType=VARCHAR} 
         AND operator_id = #{param.operatorId,jdbcType=VARCHAR} 
         AND connector_id = #{param.connectorId,jdbcType=VARCHAR}
-
+  </select>
+  
+  <select id="queryMonthBasicInformation" resultMap="BaseMonthBasicInformationResultMap">
+  	SELECT
+		bMS_code AS bms_code,
+		bMS_ver AS bms_ver,
+		sOH,
+		remain_capacity,
+		esti_r,
+		statistical_month,
+		endTime
+	FROM
+		ana_bms_single_charge
+	WHERE
+		bMS_code = #{bmsCode,jdbcType=VARCHAR} AND statistical_month = #{statisticalMonth,jdbcType=CHAR} 
+	  ORDER BY endTime DESC
+	 LIMIT 1
+  </select>
+   
+   <select id="queryMonthPerformanceHistoryAnalysis" resultMap="BaseMonthPerformanceHistoryAnalysisResultMap">
+  	SELECT
+		bMS_code AS bms_code,
+		bMS_ver AS bms_ver,
+		sum(sOH) AS history_sOH,
+		sum(remain_capacity) AS history_remain_capacity,
+		statistical_date as statistical_day
+	FROM
+		ana_bms_single_charge
+	WHERE
+		bMS_code = #{bmsCode,jdbcType=VARCHAR} AND statistical_month = #{statisticalMonth,jdbcType=CHAR}
+	GROUP BY bms_code,statistical_date
+  </select>
+  
+  <select id="queryMonthHistoricalOperationAnalysis" resultMap="BaseMonthHistoricalOperationAnalysisResultMap">
+  	SELECT
+		bMS_code AS bms_code,
+		bMS_ver AS bms_ver,
+		SUM(bms_code) AS history_times,
+		SUM(charge_time) AS history_charge_time,
+		MIN(charge_time) AS history_max_charge_time,
+		MAX(charge_time) AS history_min_charge_time,
+		MAX(voltage_h) AS history_voltage_h,
+		MIN(voltage_l) AS history_voltage_l,
+		MAX(tempture_h) AS history_tempture_h,
+		MIN(tempture_l) AS history_tempture_l,
+		statistical_month
+	FROM
+		ana_bms_single_charge
+	WHERE
+		bMS_code = #{bmsCode,jdbcType=VARCHAR} AND statistical_month = #{statisticalMonth,jdbcType=CHAR}
   </select>
 </mapper>
