@@ -1,5 +1,6 @@
 package com.cpit.cpmt.biz.impl.battery;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import com.cpit.cpmt.biz.dao.battery.AnaBmsSingleChargeDao;
 import com.cpit.cpmt.dto.battery.AnaBatteryMonthBasicInformation;
 import com.cpit.cpmt.dto.battery.AnaBatteryMonthHistoricalOperationAnalysis;
 import com.cpit.cpmt.dto.battery.AnaBatteryMonthPerformanceHistoryAnalysis;
+import com.cpit.cpmt.dto.battery.AnaBatteryOperationMonthlyAnalysis;
 
 @Service
 public class BatteryAnalysisMgmt {
@@ -33,4 +35,51 @@ public class BatteryAnalysisMgmt {
 	public List<AnaBatteryMonthHistoricalOperationAnalysis> queryMonthHistoricalOperationAnalysis(String bmsCode,String statisticalMonth) {
 		return anaBmsSingleChargeDao.queryMonthHistoricalOperationAnalysis(bmsCode, statisticalMonth);
 	}
+	
+	
+	//获取 五、电池运行情况月度分析
+	public AnaBatteryOperationMonthlyAnalysis queryBatteryOperationMonthlyAnalysis(String bmsCode,
+			String statisticalMonth) {
+		 AnaBatteryOperationMonthlyAnalysis information = anaBmsSingleChargeDao.queryBatteryOperationMonthlyAnalysis(bmsCode, statisticalMonth);
+		 if(information!=null) {
+			 Integer year = Integer.parseInt(statisticalMonth.substring(0, 4));
+			 Integer month = Integer.parseInt(statisticalMonth.substring(4));
+			 System.out.println("year="+year+",month="+month);
+			 int days = getDaysByYearAndMonth(year, month);
+			 double dailyAvgChargeTimes = new BigDecimal((float)information.getHistoryChargeTimes()/days).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+			 information.setDailyAvgChargeTimes(dailyAvgChargeTimes);//平均每日充电次数
+			 
+			 //dailyAvgChargeTime 平均每日充电时长长度
+			 double dailyAvgChargeTime = new BigDecimal((float)information.getHistoryChargeTime()/days).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+			 information.setDailyAvgChargeTime(dailyAvgChargeTime);
+			 
+			 //avgTimeChargeTime 平均每次充电时长长度，单位秒
+			 double avgTimeChargeTime = new BigDecimal((float)information.getHistoryChargeTime()/information.getHistoryChargeTimes()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+			 information.setAvgTimeChargeTime(avgTimeChargeTime);
+			 
+		 }
+		 return information;
+	}
+	
+	//获取当前月的天数
+	public int getDaysByYearAndMonth(int year, int month)
+	   {
+		   int result;
+		   if (2==month)
+		   {
+			   if(year%4==0&&year%100!=0||year%400==0){
+					result=29;
+			   }else{
+					result=28;
+			   }
+		   }
+		   else if (month==4||month==6||month==9||month==11)
+		   {
+			   result=30;
+		   }
+		   else{
+			   result=31;
+		   }
+		   return result;
+	   }	
 }

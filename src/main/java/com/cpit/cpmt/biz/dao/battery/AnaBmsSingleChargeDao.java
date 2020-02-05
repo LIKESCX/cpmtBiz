@@ -8,6 +8,7 @@ import com.cpit.common.MyBatisDao;
 import com.cpit.cpmt.dto.battery.AnaBatteryMonthBasicInformation;
 import com.cpit.cpmt.dto.battery.AnaBatteryMonthHistoricalOperationAnalysis;
 import com.cpit.cpmt.dto.battery.AnaBatteryMonthPerformanceHistoryAnalysis;
+import com.cpit.cpmt.dto.battery.AnaBatteryOperationMonthlyAnalysis;
 import com.cpit.cpmt.dto.battery.AnaBmsDayCharge;
 import com.cpit.cpmt.dto.battery.AnaBmsMonthCharge;
 import com.cpit.cpmt.dto.battery.AnaBmsSeasonCharge;
@@ -43,6 +44,7 @@ public interface AnaBmsSingleChargeDao {
 	public List<AnaBatteryMonthPerformanceHistoryAnalysis> queryMonthPerformanceHistoryAnalysis(@Param("bmsCode")String bmsCode,@Param("statisticalMonth")String statisticalMonth);
 	//获取月报告电池运行情况历史分析
 	public List<AnaBatteryMonthHistoricalOperationAnalysis> queryMonthHistoricalOperationAnalysis(@Param("bmsCode")String bmsCode,@Param("statisticalMonth")String statisticalMonth);
-	
+	//获取月报告电池运行情况月度分析
+	public AnaBatteryOperationMonthlyAnalysis queryBatteryOperationMonthlyAnalysis(@Param("bmsCode")String bmsCode,@Param("statisticalMonth")String statisticalMonth);
 	
 }

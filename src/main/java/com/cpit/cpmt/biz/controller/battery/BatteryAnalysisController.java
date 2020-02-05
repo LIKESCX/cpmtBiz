@@ -15,6 +15,7 @@ import com.cpit.cpmt.biz.impl.battery.BatteryAnalysisMgmt;
 import com.cpit.cpmt.dto.battery.AnaBatteryMonthBasicInformation;
 import com.cpit.cpmt.dto.battery.AnaBatteryMonthHistoricalOperationAnalysis;
 import com.cpit.cpmt.dto.battery.AnaBatteryMonthPerformanceHistoryAnalysis;
+import com.cpit.cpmt.dto.battery.AnaBatteryOperationMonthlyAnalysis;
 
 @RestController
 @RequestMapping("/battery")
@@ -80,6 +81,22 @@ public class BatteryAnalysisController {
 	
 	
 	//获取 五、电池运行情况月度分析
-	
+	@RequestMapping("/queryBatteryOperationMonthlyAnalysis")
+	public Object queryBatteryOperationMonthlyAnalysis(@RequestBody Map map) {
+		try {
+			String bmsCode = (String) map.get("bmsCode");
+			String statisticalMonth = (String) map.get("statisticalMonth");
+			//test start
+			bmsCode = "1";
+			statisticalMonth="202002";
+			//test end
+			AnaBatteryOperationMonthlyAnalysis information = batteryAnalysisMgmt.queryBatteryOperationMonthlyAnalysis(bmsCode,statisticalMonth);
+			String json = JsonUtil.beanToJson(information);
+			return json;
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+	}
 	
 }

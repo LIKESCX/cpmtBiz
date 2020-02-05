@@ -43,7 +43,7 @@ public class BmsAnalysisMgmt {
 			tr = countRest.analysisAll(list);
 			
 			BmsAnalysisResult bmsAnalysisResult = tr.getBmsAnalysisResult();// 获取分析结果
-			
+
 			// 调接口
 			// 根据bmsCode和结束充电时间 获取本次充电时的运营商id,站信息id,设备id,设备接口id信息详情
 			// AnaBmsSingleCharge anaBmsSingleCharge =

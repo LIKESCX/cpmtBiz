@@ -128,6 +128,30 @@
     <result column="statistical_month" jdbcType="CHAR" property="statisticalMonth" />
   </resultMap>
   
+  <resultMap id="BaseBatteryOperationMonthlyAnalysisResultMap" type="com.cpit.cpmt.dto.battery.AnaBatteryOperationMonthlyAnalysis">
+        <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="bms_code" jdbcType="VARCHAR" property="bmsCode" />
+    <result column="bms_ver" jdbcType="VARCHAR" property="bmsVer" />
+    <result column="history_charge_times" jdbcType="INTEGER" property="historyChargeTimes" />
+    <result column="daily_avg_charge_times" jdbcType="DOUBLE" property="dailyAvgChargeTimes" />
+    <result column="history_charge_time" jdbcType="INTEGER" property="historyChargeTime" />
+    <result column="daily_avg_charge_time" jdbcType="DOUBLE" property="dailyAvgChargeTime" />
+    <result column="avg_time_charge_time" jdbcType="DOUBLE" property="avgTimeChargeTime" />
+    <result column="history_min_charge_time" jdbcType="INTEGER" property="historyMinChargeTime" />
+    <result column="history_max_charge_time" jdbcType="INTEGER" property="historyMaxChargeTime" />
+    <result column="max_charging_voltage" jdbcType="REAL" property="maxChargingVoltage" />
+    <result column="max_charging_current" jdbcType="REAL" property="maxChargingCurrent" />
+    <result column="beforeSoc_l" jdbcType="VARCHAR" property="beforesocL" />
+    <result column="beforeSoc_avg" jdbcType="DOUBLE" property="beforesocAvg" />
+    <result column="afterSoc_h" jdbcType="VARCHAR" property="aftersocH" />
+    <result column="afterSoc_avg" jdbcType="DOUBLE" property="aftersocAvg" />
+    <result column="history_voltage_h" jdbcType="REAL" property="historyVoltageH" />
+    <result column="history_voltage_l" jdbcType="REAL" property="historyVoltageL" />
+    <result column="history_tempture_h" jdbcType="INTEGER" property="historyTemptureH" />
+    <result column="history_tempture_l" jdbcType="VARCHAR" property="historyTemptureL" />
+    <result column="statistical_month" jdbcType="CHAR" property="statisticalMonth" />
+  </resultMap>
+  
   <sql id="Base_Column_List">
     bMS_code, operator_id, connector_id, startTime, endTime, station_id, equipment_id, 
     bMS_ver, esti_r, remain_capacity, charge_time, sOH, remark_1, soc, voltage_h, voltage_l, 
@@ -573,8 +597,31 @@
 		bMS_ver AS bms_ver,
 		SUM(bms_code) AS history_times,
 		SUM(charge_time) AS history_charge_time,
-		MIN(charge_time) AS history_max_charge_time,
-		MAX(charge_time) AS history_min_charge_time,
+		MIN(charge_time) AS history_min_charge_time,
+		MAX(charge_time) AS history_max_charge_time,
+		MAX(voltage_h) AS history_voltage_h,
+		MIN(voltage_l) AS history_voltage_l,
+		MAX(tempture_h) AS history_tempture_h,
+		MIN(tempture_l) AS history_tempture_l,
+		statistical_month
+	FROM
+		ana_bms_single_charge
+	WHERE
+		bMS_code = #{bmsCode,jdbcType=VARCHAR} AND statistical_month = #{statisticalMonth,jdbcType=CHAR}
+  </select>
+  
+  <select id="queryBatteryOperationMonthlyAnalysis" resultMap="BaseBatteryOperationMonthlyAnalysisResultMap">
+  	SELECT
+		bMS_code AS bms_code,
+		bMS_ver AS bms_ver,
+		SUM(bms_code) AS history_charge_times,
+		SUM(charge_time) AS history_charge_time,
+		MIN(charge_time) AS history_min_charge_time,
+		MAX(charge_time) AS history_max_charge_time,
+		MIN(beforeSoc) AS beforeSoc_l,
+		AVG(beforeSoc) AS beforesoc_avg,
+		MAX(afterSoc) AS afterSoc_h,
+		AVG(afterSoc) AS aftersoc_avg,
 		MAX(voltage_h) AS history_voltage_h,
 		MIN(voltage_l) AS history_voltage_l,
 		MAX(tempture_h) AS history_tempture_h,

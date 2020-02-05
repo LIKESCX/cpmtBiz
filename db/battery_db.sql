@@ -206,8 +206,8 @@ CREATE TABLE `ana_battery_month_historical_operation_analysis` (
   `bms_ver` varchar(50) DEFAULT '' COMMENT 'BMS版本',
   `history_times` int(10) DEFAULT NULL COMMENT '历史充电次数',
   `history_charge_time` int(9) DEFAULT NULL COMMENT '历史充电时间长度，单位秒',
-  `history_max_charge_time` int(9) DEFAULT NULL COMMENT '历史最快充电时间长度，单位秒',
-  `history_min_charge_time` int(9) DEFAULT NULL COMMENT '历史最慢充电时间长度，单位秒',
+  `history_max_charge_time` int(9) DEFAULT NULL COMMENT '历史最慢充电时间长度，单位秒',
+  `history_min_charge_time` int(9) DEFAULT NULL COMMENT '历史最快充电时间长度，单位秒',
   `max_charging_voltage` float(20,7) NOT NULL DEFAULT '0.0000000' COMMENT '最大充电电压',
   `max_charging_current` float(20,7) NOT NULL DEFAULT '0.0000000' COMMENT '最大充电电流',
   `history_voltage_h` float(20,7) NOT NULL DEFAULT '0.0000000' COMMENT '最高单体电压',
@@ -218,3 +218,28 @@ CREATE TABLE `ana_battery_month_historical_operation_analysis` (
   `statistical_month` char(6) NOT NULL COMMENT '对应的月份(以结束时间为准)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='电池性能历史分析月表';
+-- 电池运行情况月度分析表
+CREATE TABLE `ana_battery_operation_monthly_analysis` (
+  `id` int(10) NOT NULL COMMENT 'id',
+  `bms_code` varchar(50) NOT NULL COMMENT 'BMS编码',
+  `bms_ver` varchar(50) DEFAULT '' COMMENT 'BMS版本',
+  `history_charge_times` int(10) DEFAULT NULL COMMENT '本月历史充电次数',
+  `daily_avg_charge_times` double(10,2) DEFAULT NULL COMMENT '平均每日充电次数',
+  `history_charge_time` int(9) DEFAULT NULL COMMENT '本月历史充电时间长度，单位秒',
+  `daily_avg_charge_time` double(10,2) DEFAULT NULL COMMENT '平均每日充电时长长度，单位秒',
+  `avg_time_charge_time` double(10,2) DEFAULT NULL COMMENT '平均每次充电时长长度，单位秒',
+  `history_min_charge_time` int(9) DEFAULT NULL COMMENT '单次最快充电时长长度，单位秒',
+  `history_max_charge_time` int(9) DEFAULT NULL COMMENT '单次最慢充电时长长度，单位秒',
+  `max_charging_voltage` float(20,7) NOT NULL DEFAULT '0.0000000' COMMENT '最大充电电压',
+  `max_charging_current` float(20,7) NOT NULL DEFAULT '0.0000000' COMMENT '最大充电电流',
+  `beforeSoc_l` varchar(10) DEFAULT NULL COMMENT '充电开始soc最低值',
+  `beforeSoc_avg` double(10,2) DEFAULT NULL COMMENT '充电开始soc平均值',
+  `afterSoc_h` varchar(10) DEFAULT NULL COMMENT '充电结束soc最高值',
+  `afterSoc_avg` double(10,2) DEFAULT NULL COMMENT '充电结束soc平均值',
+  `history_voltage_h` float(20,7) NOT NULL DEFAULT '0.0000000' COMMENT '最高单体电压',
+  `history_voltage_l` float(20,7) NOT NULL DEFAULT '0.0000000' COMMENT '最低单体电压',
+  `history_tempture_h` int(10) NOT NULL DEFAULT '0' COMMENT '最高温度同单体最高温度',
+  `history_tempture_l` varchar(10) NOT NULL DEFAULT '0' COMMENT '最低温度同单体最低温度',
+  `statistical_month` char(6) NOT NULL COMMENT '对应的月份(以结束时间为准)',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='电池运行情况月度分析表';
