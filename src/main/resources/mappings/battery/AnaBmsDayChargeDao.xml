@@ -81,4 +81,18 @@
     </trim>
   </insert>
   
+  <select id="queryFirstLevelDataGranularityByDay" resultMap="BaseResultMap"  parameterType="com.cpit.cpmt.dto.battery.BatteryDataTrackingAssessmentConditions">
+  	SELECT
+			bms_code,
+			operator_id,
+			station_id,
+			equipment_id,
+			connector_id,
+			statistics_times,
+			statistical_day
+		FROM
+			ana_bms_day_charge
+		WHERE
+			statistical_day BETWEEN #{param.startStatisticalDay} AND #{param.endStatisticalDay}
+  </select>
 </mapper>

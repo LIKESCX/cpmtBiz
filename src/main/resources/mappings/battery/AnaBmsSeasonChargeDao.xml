@@ -74,5 +74,18 @@
       </if>
     </trim>
   </insert>
-  
+  <select id="queryFirstLevelDataGranularityBySeason" resultMap="BaseResultMap" parameterType="com.cpit.cpmt.dto.battery.BatteryDataTrackingAssessmentConditions">
+  	SELECT
+			bms_code,
+			operator_id,
+			station_id,
+			equipment_id,
+			connector_id,
+			statistics_times,
+			statistical_season
+		FROM
+			ana_bms_season_charge
+		WHERE
+			statistical_season BETWEEN #{param.startStatisticalSeason} AND #{param.endStatisticalSeason}
+  </select>
 </mapper>

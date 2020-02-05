@@ -72,5 +72,19 @@
       </if>
     </trim>
   </insert>
- 
+  <select id="queryFirstLevelDataGranularityByWeek" resultMap="BaseResultMap" parameterType="com.cpit.cpmt.dto.battery.BatteryDataTrackingAssessmentConditions">
+  	SELECT
+			bms_code,
+			operator_id,
+			station_id,
+			equipment_id,
+			connector_id,
+			statistics_times,
+			statistical_week
+		FROM
+			ana_bms_week_charge
+		WHERE
+			statistical_week BETWEEN #{param.startStatisticalWeek} AND #{param.endStatisticalWeek}
+
+  </select>
 </mapper>

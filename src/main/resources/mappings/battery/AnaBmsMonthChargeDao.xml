@@ -102,4 +102,19 @@
       and connector_id = #{connectorId,jdbcType=VARCHAR}
       and statistical_month = #{statisticalMonth,jdbcType=CHAR}
   </update>
+ <select id="queryFirstLevelDataGranularityByMonth" resultMap="BaseResultMap" parameterType="com.cpit.cpmt.dto.battery.BatteryDataTrackingAssessmentConditions">
+  	SELECT
+			bms_code,
+			operator_id,
+			station_id,
+			equipment_id,
+			connector_id,
+			statistics_times,
+			statistical_month
+		FROM
+			ana_bms_month_charge
+		WHERE
+			statistical_month BETWEEN #{param.startStatisticalMonth} AND  #{param.endStatisticalMonth}
+
+  </select> 
 </mapper>

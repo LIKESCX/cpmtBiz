@@ -22,6 +22,8 @@
     <result column="tempture_l" jdbcType="INTEGER" property="temptureL" />
     <result column="beforeSoc" jdbcType="INTEGER" property="beforeSoc" />
     <result column="afterSoc" jdbcType="INTEGER" property="afterSoc" />
+    <result column="statisticalTimes" jdbcType="CHAR" property="statisticalTimes" />
+    <result column="statisticalHour" jdbcType="CHAR" property="statisticalHour" />
     <result column="statistical_date" jdbcType="CHAR" property="statisticalDate" />
     <result column="statistical_week" jdbcType="CHAR" property="statisticalWeek" />
     <result column="statistical_month" jdbcType="CHAR" property="statisticalMonth" />
@@ -406,5 +408,90 @@
 		a.bms_code = b.bms_code
 	AND a.connector_id = b.connector_id
 	AND a.operator_id = b.operator_id
+  </select>
+  
+  <select id="queryFirstLevelDataGranularityByHour" resultMap="BaseResultMap" parameterType="com.cpit.cpmt.dto.battery.BatteryDataTrackingAssessmentConditions">
+  	SELECT
+			bms_code,
+			operator_id,
+			station_id,
+			equipment_id,
+			connector_id,
+			COUNT(bms_code) AS statisticalTimes,
+			DATE_FORMAT(endTime, '%Y-%m-%d %H') as statisticalHour
+		FROM
+			ana_bms_single_charge
+		WHERE
+			DATE_FORMAT(endTime, '%Y-%m-%d %H') BETWEEN DATE_FORMAT(
+				#{param.startTime},
+				'%Y-%m-%d %H'
+			)
+		AND DATE_FORMAT(endTime, '%Y-%m-%d %H') AND DATE_FORMAT(
+			#{param.endTime},
+			'%Y-%m-%d %H'
+		)
+		GROUP BY
+			bms_code,
+			operator_id,
+			station_id,
+			equipment_id,
+			connector_id,
+			DATE_FORMAT(endTime, '%Y-%m-%d %H')
+  </select>
+  
+  <select id="querySecondLevelData" resultMap="BaseResultMap" parameterType="com.cpit.cpmt.dto.battery.BatteryDataTrackingAssessmentConditions">
+  	SELECT
+			bms_code,
+			operator_id,
+			station_id,
+			equipment_id,
+			connector_id,
+			startTime,
+			endTime
+		FROM
+			ana_bms_single_charge
+		WHERE
+			<if test="param.timeGranularity == 1">
+        		DATE_FORMAT(endTime, '%Y-%m-%d %H') = #{param.startStatisticalHour}
+      		</if>
+			<if test="param.timeGranularity == 2">
+        		statistical_date = #{param.startStatisticalDay}
+      		</if>
+			<if test="param.timeGranularity == 3">
+        		statistical_week = #{param.startStatisticalWeek}
+      		</if>
+			<if test="param.timeGranularity == 4">
+        		statistical_month = #{param.startStatisticalMonth}
+      		</if>
+			<if test="param.timeGranularity == 5">
+        		statistical_year = #{param.startStatisticalYear}
+      		</if>
+        AND bMS_code = #{param.bMSCode,jdbcType=VARCHAR} AND operator_id = #{param.operatorId,jdbcType=VARCHAR} AND connector_id = #{param.connectorId,jdbcType=VARCHAR}
+
+  </select>
+  
+  <select id="queryThirdLevelData" resultMap="BaseResultMap" parameterType="com.cpit.cpmt.dto.battery.BatteryDataTrackingAssessmentConditions">
+  	SELECT
+			bms_code,
+			voltage_h,
+			voltage_l,
+			beforeSoc,
+			afterSoc,
+			tempture_h,
+			tempture_l,
+			sOH,
+			esti_r,
+			remain_capacity,
+			startTime,
+			endTime
+		FROM
+			ana_bms_single_charge
+		WHERE
+            startTime= DATE_FORMAT(#{param.startTime},'%Y-%m-%d %H:%i:%S')
+        AND endTime= DATE_FORMAT(#{param.endTime},'%Y-%m-%d %H:%i:%S')
+        AND bMS_code = #{param.bMSCode,jdbcType=VARCHAR} 
+        AND operator_id = #{param.operatorId,jdbcType=VARCHAR} 
+        AND connector_id = #{param.connectorId,jdbcType=VARCHAR}
+
   </select>
 </mapper>
