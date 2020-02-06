@@ -113,8 +113,30 @@
 			statistical_month
 		FROM
 			ana_bms_month_charge
-		WHERE
-			statistical_month BETWEEN #{param.startStatisticalMonth} AND  #{param.endStatisticalMonth}
-
+		<where>
+				bms_code = #{param.bMSCode}
+			<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+				AND operator_id = #{param.operatorId}
+			</if>
+			 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+				AND	station_id = #{param.stationId}	
+			</if>
+			<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+				AND equipment_id = #{param.equipmentId}
+			</if>
+				AND statistical_month BETWEEN #{param.startStatisticalMonth} AND  #{param.endStatisticalMonth}
+		</where>
   </select> 
+  
+ <!-- <select id="queryBmsMonthChargeInfo" resultMap="BaseResultMap">
+  	SELECT
+			bms_code,
+			statistics_times
+		FROM
+			ana_bms_month_charge
+		WHERE
+			bMS_code = #{bmsCode,jdbcType=VARCHAR} 
+		AND 
+			statistical_month = #{statisticalMonth,jdbcType=CHAR}
+  </select>  -->
 </mapper>

@@ -19,4 +19,6 @@ public interface AnaBmsMonthChargeDao {
     int updateByPrimaryKey(AnaBmsMonthCharge record);
 
 	List<AnaBmsMonthCharge> queryFirstLevelDataGranularityByMonth(@Param("param")BatteryDataTrackingAssessmentConditions param);
-}
+
+/*	public AnaBmsMonthCharge queryBmsMonthChargeInfo(@Param("param")BatteryDataTrackingAssessmentConditions param);*/
+	}

@@ -92,7 +92,18 @@
 			statistical_day
 		FROM
 			ana_bms_day_charge
-		WHERE
-			statistical_day BETWEEN #{param.startStatisticalDay} AND #{param.endStatisticalDay}
+		<where>
+			bms_code = #{param.bMSCode}
+			<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+				AND operator_id = #{param.operatorId}
+			</if>
+			 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+				AND	station_id = #{param.stationId}	
+			</if>
+			<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+				AND equipment_id = #{param.equipmentId}
+			</if>
+				AND statistical_day BETWEEN #{param.startStatisticalDay} AND #{param.endStatisticalDay}
+  		</where>
   </select>
 </mapper>

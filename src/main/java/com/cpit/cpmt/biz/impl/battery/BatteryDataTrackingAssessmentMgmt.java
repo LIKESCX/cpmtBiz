@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cpit.common.TimeConvertor;
+import com.cpit.common.db.Page;
 import com.cpit.cpmt.biz.dao.battery.AnaBmsDayChargeDao;
 import com.cpit.cpmt.biz.dao.battery.AnaBmsMonthChargeDao;
 import com.cpit.cpmt.biz.dao.battery.AnaBmsSeasonChargeDao;
@@ -33,13 +34,13 @@ public class BatteryDataTrackingAssessmentMgmt {
 	@Autowired private AnaBmsMonthChargeDao anaBmsMonthChargeDao;
 	@Autowired private AnaBmsSeasonChargeDao anaBmsSeasonChargeDao;
 	public Object queryFirstLevelData(BatteryDataTrackingAssessmentConditions param) {
-		if(param.getAllOperators()==1) {//表明全选
-			logger.info("运营商全选标识符为[{}]表明全选", param.getAllOperators());
+		//if(param.getAllOperators()==1) {//表明全选
 			Date startTime = param.getStartTime();
 			Date endTime = param.getEndTime();
 			if(param.getTimeGranularity()==1) {//表示按小时统计
 				List<AnaBmsSingleCharge> list = anaBmsSingleChargeDao.queryFirstLevelDataGranularityByHour(param);
 				logger.info("queryFirstLevelDataGranularityByHour:"+list);
+				return list;
 			}else if(param.getTimeGranularity()==2) {//表示按天统计
 				String startStatisticalDay = TimeConvertor.date2String(startTime, "yyyyMMdd");
 				String endStatisticalDay = TimeConvertor.date2String(endTime, "yyyyMMdd");
@@ -77,16 +78,15 @@ public class BatteryDataTrackingAssessmentMgmt {
 			}
 			return null;
 			
-		}
-		return null;
+		//}
 	}
 	
-	public Object querySecondLevelData(BatteryDataTrackingAssessmentConditions param) {
-		List<AnaBmsSingleCharge> list = anaBmsSingleChargeDao.querySecondLevelData(param);
+	public Page<AnaBmsSingleCharge> querySecondLevelData(BatteryDataTrackingAssessmentConditions param) {
+		Page<AnaBmsSingleCharge> list = anaBmsSingleChargeDao.querySecondLevelData(param);
 		return list;
 	}
 	
-	public Object queryThirdLevelData(BatteryDataTrackingAssessmentConditions param) {
+	public List<AnaBmsSingleCharge> queryThirdLevelData(BatteryDataTrackingAssessmentConditions param) {
 		List<AnaBmsSingleCharge> list = anaBmsSingleChargeDao.queryThirdLevelData(param);
 		return list;
 	}

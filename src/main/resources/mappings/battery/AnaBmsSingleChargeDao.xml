@@ -28,6 +28,7 @@
     <result column="statistical_week" jdbcType="CHAR" property="statisticalWeek" />
     <result column="statistical_month" jdbcType="CHAR" property="statisticalMonth" />
     <result column="statistical_season" jdbcType="CHAR" property="statisticalSeason" />
+    <result column="statistical_year" jdbcType="CHAR" property="statisticalYear" />
   </resultMap>
   
   <resultMap id="BaseDayResultMap" type="com.cpit.cpmt.dto.battery.AnaBmsDayCharge">
@@ -98,6 +99,8 @@
     <result column="remain_capacity" jdbcType="INTEGER" property="remainCapacity" />
     <result column="esti_r" jdbcType="INTEGER" property="estiR" />
     <result column="statistical_month" jdbcType="CHAR" property="statisticalMonth" />
+    <result column="statistical_season" jdbcType="CHAR" property="statisticalSeason" />
+    <result column="statistical_year" jdbcType="CHAR" property="statisticalYear" />
   </resultMap>
   
   <resultMap id="BaseMonthPerformanceHistoryAnalysisResultMap" type="com.cpit.cpmt.dto.battery.AnaBatteryMonthPerformanceHistoryAnalysis">
@@ -156,7 +159,7 @@
     bMS_code, operator_id, connector_id, startTime, endTime, station_id, equipment_id, 
     bMS_ver, esti_r, remain_capacity, charge_time, sOH, remark_1, soc, voltage_h, voltage_l, 
     tempture_h, tempture_l, beforeSoc, afterSoc, statistical_date, statistical_week, statistical_month, 
-    statistical_season
+    statistical_season,statistical_year
   </sql>
 
   <insert id="insertSelective" parameterType="com.cpit.cpmt.dto.battery.AnaBmsSingleCharge">
@@ -234,6 +237,9 @@
       <if test="statisticalSeason != null">
         statistical_season,
       </if>
+      <if test="statisticalYear != null">
+        statistical_year,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="bMSCode != null">
@@ -307,6 +313,9 @@
       </if>
       <if test="statisticalSeason != null">
         #{statisticalSeason,jdbcType=CHAR},
+      </if>
+      <if test="statisticalYear != null">
+        #{statisticalYear,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -487,15 +496,26 @@
 			DATE_FORMAT(endTime, '%Y-%m-%d %H') as statisticalHour
 		FROM
 			ana_bms_single_charge
-		WHERE
-			DATE_FORMAT(endTime, '%Y-%m-%d %H') BETWEEN DATE_FORMAT(
-				#{param.startTime},
+		<where>
+			bms_code = #{param.bMSCode}
+			AND	DATE_FORMAT(endTime, '%Y-%m-%d %H') BETWEEN DATE_FORMAT(
+					#{param.startTime},
+					'%Y-%m-%d %H'
+				)
+			AND DATE_FORMAT(endTime, '%Y-%m-%d %H') AND DATE_FORMAT(
+				#{param.endTime},
 				'%Y-%m-%d %H'
 			)
-		AND DATE_FORMAT(endTime, '%Y-%m-%d %H') AND DATE_FORMAT(
-			#{param.endTime},
-			'%Y-%m-%d %H'
-		)
+			<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+				AND operator_id = #{param.operatorId}
+			</if>
+			 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+				AND	station_id = #{param.stationId}	
+			</if>
+			<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+				AND equipment_id = #{param.equipmentId}
+			</if>
+		</where>
 		GROUP BY
 			bms_code,
 			operator_id,
@@ -518,19 +538,19 @@
 			ana_bms_single_charge
 		WHERE
 			<if test="param.timeGranularity == 1">
-        		DATE_FORMAT(endTime, '%Y-%m-%d %H') = #{param.startStatisticalHour}
+        		DATE_FORMAT(endTime, '%Y-%m-%d %H') = #{param.statisticalHour}
       		</if>
 			<if test="param.timeGranularity == 2">
-        		statistical_date = #{param.startStatisticalDay}
+        		AND statistical_date = #{param.statisticalDay}
       		</if>
 			<if test="param.timeGranularity == 3">
-        		statistical_week = #{param.startStatisticalWeek}
+        		AND statistical_week = #{param.statisticalWeek}
       		</if>
 			<if test="param.timeGranularity == 4">
-        		statistical_month = #{param.startStatisticalMonth}
+        		AND statistical_month = #{param.statisticalMonth}
       		</if>
 			<if test="param.timeGranularity == 5">
-        		statistical_year = #{param.startStatisticalYear}
+        		AND statistical_season = #{param.statisticalSeason}
       		</if>
         AND bMS_code = #{param.bMSCode,jdbcType=VARCHAR} AND operator_id = #{param.operatorId,jdbcType=VARCHAR} AND connector_id = #{param.connectorId,jdbcType=VARCHAR}
 
@@ -559,7 +579,7 @@
         AND operator_id = #{param.operatorId,jdbcType=VARCHAR} 
         AND connector_id = #{param.connectorId,jdbcType=VARCHAR}
   </select>
-  
+  <!-- 导报告时 月和季和年通用的 -->
   <select id="queryMonthBasicInformation" resultMap="BaseMonthBasicInformationResultMap">
   	SELECT
 		bMS_code AS bms_code,
@@ -568,11 +588,30 @@
 		remain_capacity,
 		esti_r,
 		statistical_month,
-		endTime
+		statistical_season,
+		statistical_year
 	FROM
 		ana_bms_single_charge
 	WHERE
-		bMS_code = #{bmsCode,jdbcType=VARCHAR} AND statistical_month = #{statisticalMonth,jdbcType=CHAR} 
+		    bMS_code = #{param.bMSCode,jdbcType=VARCHAR}
+		<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+			AND operator_id = #{param.operatorId}
+		</if>
+		 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+			AND	station_id = #{param.stationId}	
+		</if>
+		<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+			AND equipment_id = #{param.equipmentId}
+		</if>
+		<if test="param.timeGranularity == 4">
+        	AND statistical_month = #{param.statisticalMonth}
+      	</if>
+		<if test="param.timeGranularity == 5">
+       		AND statistical_season = #{param.statisticalSeason}
+     	</if>
+		<if test="param.timeGranularity == 6">
+       		AND statistical_year = #{param.statisticalYear}
+     	</if>
 	  ORDER BY endTime DESC
 	 LIMIT 1
   </select>
@@ -587,34 +626,108 @@
 	FROM
 		ana_bms_single_charge
 	WHERE
-		bMS_code = #{bmsCode,jdbcType=VARCHAR} AND statistical_month = #{statisticalMonth,jdbcType=CHAR}
-	GROUP BY bms_code,statistical_date
+		bMS_code = #{param.bMSCode,jdbcType=VARCHAR}
+		<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+			AND operator_id = #{param.operatorId}
+		</if>
+		 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+			AND	station_id = #{param.stationId}	
+		</if>
+		<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+			AND equipment_id = #{param.equipmentId}
+		</if>
+        	AND statistical_month = #{param.statisticalMonth}
+        	GROUP BY bms_code,statistical_date
+  </select>
+   <select id="querySeasonPerformanceHistoryAnalysis" resultMap="BaseMonthPerformanceHistoryAnalysisResultMap">
+  	SELECT
+		bMS_code AS bms_code,
+		bMS_ver AS bms_ver,
+		sum(sOH) AS history_sOH,
+		sum(remain_capacity) AS history_remain_capacity,
+		statistical_month
+	FROM
+		ana_bms_single_charge
+	WHERE
+		bMS_code = #{param.bMSCode,jdbcType=VARCHAR}
+		<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+			AND operator_id = #{param.operatorId}
+		</if>
+		 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+			AND	station_id = #{param.stationId}	
+		</if>
+		<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+			AND equipment_id = #{param.equipmentId}
+		</if>
+       		AND statistical_season = #{param.statisticalSeason}
+       		GROUP BY bms_code,statistical_month
+   </select>
+   <select id="queryYearPerformanceHistoryAnalysis" resultMap="BaseMonthPerformanceHistoryAnalysisResultMap">
+  	SELECT
+		bMS_code AS bms_code,
+		bMS_ver AS bms_ver,
+		sum(sOH) AS history_sOH,
+		sum(remain_capacity) AS history_remain_capacity,
+		statistical_month
+	FROM
+		ana_bms_single_charge
+	WHERE
+		bMS_code = #{param.bMSCode,jdbcType=VARCHAR}
+		<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+			AND operator_id = #{param.operatorId}
+		</if>
+		 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+			AND	station_id = #{param.stationId}	
+		</if>
+		<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+			AND equipment_id = #{param.equipmentId}
+		</if>
+       		AND statistical_year = #{param.statisticalYear}
+       		GROUP BY bms_code,statistical_month
   </select>
   
   <select id="queryMonthHistoricalOperationAnalysis" resultMap="BaseMonthHistoricalOperationAnalysisResultMap">
   	SELECT
 		bMS_code AS bms_code,
 		bMS_ver AS bms_ver,
-		SUM(bms_code) AS history_times,
+		COUNT(bms_code) AS history_times,
 		SUM(charge_time) AS history_charge_time,
 		MIN(charge_time) AS history_min_charge_time,
 		MAX(charge_time) AS history_max_charge_time,
 		MAX(voltage_h) AS history_voltage_h,
 		MIN(voltage_l) AS history_voltage_l,
 		MAX(tempture_h) AS history_tempture_h,
-		MIN(tempture_l) AS history_tempture_l,
-		statistical_month
+		MIN(tempture_l) AS history_tempture_l
 	FROM
 		ana_bms_single_charge
 	WHERE
-		bMS_code = #{bmsCode,jdbcType=VARCHAR} AND statistical_month = #{statisticalMonth,jdbcType=CHAR}
+		bMS_code = #{param.bMSCode,jdbcType=VARCHAR}
+		<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+			AND operator_id = #{param.operatorId}
+		</if>
+		 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+			AND	station_id = #{param.stationId}	
+		</if>
+		<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+			AND equipment_id = #{param.equipmentId}
+		</if>
+		<if test="param.timeGranularity == 4">
+        	AND statistical_month = #{param.statisticalMonth}
+      	</if>
+		<if test="param.timeGranularity == 5">
+       		AND statistical_season = #{param.statisticalSeason}
+     	</if>
+		<if test="param.timeGranularity == 6">
+       		AND statistical_year = #{param.statisticalYear}
+     	</if>
+	
   </select>
   
   <select id="queryBatteryOperationMonthlyAnalysis" resultMap="BaseBatteryOperationMonthlyAnalysisResultMap">
   	SELECT
 		bMS_code AS bms_code,
 		bMS_ver AS bms_ver,
-		SUM(bms_code) AS history_charge_times,
+		COUNT(bms_code) AS history_charge_times,
 		SUM(charge_time) AS history_charge_time,
 		MIN(charge_time) AS history_min_charge_time,
 		MAX(charge_time) AS history_max_charge_time,
@@ -625,11 +738,56 @@
 		MAX(voltage_h) AS history_voltage_h,
 		MIN(voltage_l) AS history_voltage_l,
 		MAX(tempture_h) AS history_tempture_h,
-		MIN(tempture_l) AS history_tempture_l,
-		statistical_month
+		MIN(tempture_l) AS history_tempture_l
 	FROM
 		ana_bms_single_charge
 	WHERE
-		bMS_code = #{bmsCode,jdbcType=VARCHAR} AND statistical_month = #{statisticalMonth,jdbcType=CHAR}
+		bMS_code = #{param.bMSCode,jdbcType=VARCHAR}
+		<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+			AND operator_id = #{param.operatorId}
+		</if>
+		 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+			AND	station_id = #{param.stationId}	
+		</if>
+		<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+			AND equipment_id = #{param.equipmentId}
+		</if>
+		<if test="param.timeGranularity == 4">
+        	AND statistical_month = #{param.statisticalMonth}
+      	</if>
+		<if test="param.timeGranularity == 5">
+       		AND statistical_season = #{param.statisticalSeason}
+     	</if>
+		<if test="param.timeGranularity == 6">
+       		AND statistical_year = #{param.statisticalYear}
+     	</if>
+  </select>
+  
+  <select id="queryStatisticalTimes" resultMap="BaseResultMap">
+  	SELECT
+			bms_code,
+			COUNT(bms_code) AS statisticalTimes
+		FROM
+			ana_bms_single_charge
+		WHERE
+			bMS_code = #{param.bMSCode,jdbcType=VARCHAR}
+		<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+			AND operator_id = #{param.operatorId}
+		</if>
+		 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+			AND	station_id = #{param.stationId}	
+		</if>
+		<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+			AND equipment_id = #{param.equipmentId}
+		</if>
+		<if test="param.timeGranularity == 4">
+        	AND statistical_month = #{param.statisticalMonth}
+      	</if>
+		<if test="param.timeGranularity == 5">
+       		AND statistical_season = #{param.statisticalSeason}
+     	</if>
+		<if test="param.timeGranularity == 6">
+       		AND statistical_year = #{param.statisticalYear}
+     	</if>
   </select>
 </mapper>

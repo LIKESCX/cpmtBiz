@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.cpit.common.MyBatisDao;
+import com.cpit.common.db.Page;
 import com.cpit.cpmt.dto.battery.AnaBatteryMonthBasicInformation;
 import com.cpit.cpmt.dto.battery.AnaBatteryMonthHistoricalOperationAnalysis;
 import com.cpit.cpmt.dto.battery.AnaBatteryMonthPerformanceHistoryAnalysis;
@@ -35,16 +36,24 @@ public interface AnaBmsSingleChargeDao {
 	//第一级钻取按小时粒度查询充电统计次数
 	public List<AnaBmsSingleCharge> queryFirstLevelDataGranularityByHour(@Param("param")BatteryDataTrackingAssessmentConditions param);
 	//第二级钻取数据
-	public List<AnaBmsSingleCharge> querySecondLevelData(@Param("param")BatteryDataTrackingAssessmentConditions param);
+	public Page<AnaBmsSingleCharge> querySecondLevelData(@Param("param")BatteryDataTrackingAssessmentConditions param);
 	//第三级钻取数据
 	public List<AnaBmsSingleCharge> queryThirdLevelData(@Param("param")BatteryDataTrackingAssessmentConditions param);
-	//获取月报告基本信息
-	public AnaBatteryMonthBasicInformation queryMonthBasicInformation(@Param("bmsCode")String bmsCode,@Param("statisticalMonth")String statisticalMonth);
-	//获取月报告电池性能历史分析
-	public List<AnaBatteryMonthPerformanceHistoryAnalysis> queryMonthPerformanceHistoryAnalysis(@Param("bmsCode")String bmsCode,@Param("statisticalMonth")String statisticalMonth);
-	//获取月报告电池运行情况历史分析
-	public List<AnaBatteryMonthHistoricalOperationAnalysis> queryMonthHistoricalOperationAnalysis(@Param("bmsCode")String bmsCode,@Param("statisticalMonth")String statisticalMonth);
-	//获取月报告电池运行情况月度分析
-	public AnaBatteryOperationMonthlyAnalysis queryBatteryOperationMonthlyAnalysis(@Param("bmsCode")String bmsCode,@Param("statisticalMonth")String statisticalMonth);
+	//获取月/季/年报告基本信息
+	public AnaBatteryMonthBasicInformation queryMonthBasicInformation(@Param("param")BatteryDataTrackingAssessmentConditions param);
+	
+	//单独获取月报告电池性能历史分析
+	public List<AnaBatteryMonthPerformanceHistoryAnalysis> queryMonthPerformanceHistoryAnalysis(@Param("param")BatteryDataTrackingAssessmentConditions param);
+	//单独获取季报告电池性能历史分析
+	public List<AnaBatteryMonthPerformanceHistoryAnalysis> querySeasonPerformanceHistoryAnalysis(@Param("param")BatteryDataTrackingAssessmentConditions param);
+	//单独获取年报告电池性能历史分析
+	public List<AnaBatteryMonthPerformanceHistoryAnalysis> queryYearPerformanceHistoryAnalysis(@Param("param")BatteryDataTrackingAssessmentConditions param);
+	
+	//获取月/季/年报告电池运行情况历史分析
+	public List<AnaBatteryMonthHistoricalOperationAnalysis> queryMonthHistoricalOperationAnalysis(@Param("param")BatteryDataTrackingAssessmentConditions param);
+	//获取月/季/年报告电池运行情况月度分析
+	public AnaBatteryOperationMonthlyAnalysis queryBatteryOperationMonthlyAnalysis(@Param("param")BatteryDataTrackingAssessmentConditions param);
+
+	public AnaBmsSingleCharge queryStatisticalTimes(@Param("param") BatteryDataTrackingAssessmentConditions param);
 	
 }

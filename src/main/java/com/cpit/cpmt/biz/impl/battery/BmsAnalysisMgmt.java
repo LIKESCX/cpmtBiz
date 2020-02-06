@@ -68,11 +68,13 @@ public class BmsAnalysisMgmt {
 			String statisticalMonth = TimeConvertor.date2String(endTime, "yyyyMM");
 			// 季
 			String statisticalSeason = getSeasonTime(endTime);
-
+			// 年
+			String statisticalYear = TimeConvertor.date2String(endTime, "yyyy");
 			anaBmsSingleCharge.setStatisticalDate(statisticalDate);
 			anaBmsSingleCharge.setStatisticalWeek(statisticalWeek);
 			anaBmsSingleCharge.setStatisticalMonth(statisticalMonth);
 			anaBmsSingleCharge.setStatisticalSeason(statisticalSeason);
+			anaBmsSingleCharge.setStatisticalYear(statisticalYear);
 			// 收到的时间此字段待定
 			// 入库的时间此字段待定
 			// 计算后的正常分析结果原始数据入库
@@ -97,6 +99,7 @@ public class BmsAnalysisMgmt {
 				ascwr.setStatisticalWeek(statisticalWeek);
 				ascwr.setStatisticalMonth(statisticalMonth);
 				ascwr.setStatisticalSeason(statisticalSeason);
+				ascwr.setStatisticalYear(statisticalYear);
 				anaBmsSingleChargeWarningResultDao.insertSelective(ascwr);
 			}
 			logger.info("anaBmsSingleChargeWarningResultDao.insertSelective is success");
