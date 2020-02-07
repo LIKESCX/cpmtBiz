@@ -13,12 +13,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.bbap.model.BmsInfo;
 import com.bbap.rest.CountRest;
+import com.bbap.util.BbapBatterySoh;
 import com.bbap.util.CountUtil;
 import com.bbap.util.PmmlUtil;
+import com.bbap.util.WarningCount;
+import com.cpit.cpmt.biz.impl.security.battery.BmsAnalysisMgmt;
 import com.cpit.cpmt.biz.main.Application;
 
 @RunWith(SpringRunner.class)
-@Import({CountRest.class,CountUtil.class,PmmlUtil.class})
+@Import({CountRest.class,CountUtil.class,PmmlUtil.class,WarningCount.class,BbapBatterySoh.class})
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class SingleChargeAnalysisMgmtTest {
 	@Autowired

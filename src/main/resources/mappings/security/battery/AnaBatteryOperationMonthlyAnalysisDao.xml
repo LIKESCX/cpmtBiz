@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpit.cpmt.biz.dao.security.battery.AnaBatteryOperationMonthlyAnalysisDao">
+   <resultMap id="BaseResultMap" type="com.cpit.cpmt.security.battery.AnaBatteryOperationMonthlyAnalysis">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="bms_code" jdbcType="VARCHAR" property="bmsCode" />
+    <result column="bms_ver" jdbcType="VARCHAR" property="bmsVer" />
+    <result column="history_charge_times" jdbcType="INTEGER" property="historyChargeTimes" />
+    <result column="daily_avg_charge_times" jdbcType="DOUBLE" property="dailyAvgChargeTimes" />
+    <result column="history_charge_time" jdbcType="INTEGER" property="historyChargeTime" />
+    <result column="daily_avg_charge_time" jdbcType="DOUBLE" property="dailyAvgChargeTime" />
+    <result column="avg_time_charge_time" jdbcType="DOUBLE" property="avgTimeChargeTime" />
+    <result column="history_min_charge_time" jdbcType="INTEGER" property="historyMinChargeTime" />
+    <result column="history_max_charge_time" jdbcType="INTEGER" property="historyMaxChargeTime" />
+    <result column="max_charging_voltage" jdbcType="REAL" property="maxChargingVoltage" />
+    <result column="max_charging_current" jdbcType="REAL" property="maxChargingCurrent" />
+    <result column="beforeSoc_l" jdbcType="VARCHAR" property="beforesocL" />
+    <result column="beforeSoc_avg" jdbcType="DOUBLE" property="beforesocAvg" />
+    <result column="afterSoc_h" jdbcType="VARCHAR" property="aftersocH" />
+    <result column="afterSoc_avg" jdbcType="DOUBLE" property="aftersocAvg" />
+    <result column="history_voltage_h" jdbcType="REAL" property="historyVoltageH" />
+    <result column="history_voltage_l" jdbcType="REAL" property="historyVoltageL" />
+    <result column="history_tempture_h" jdbcType="INTEGER" property="historyTemptureH" />
+    <result column="history_tempture_l" jdbcType="VARCHAR" property="historyTemptureL" />
+    <result column="statistical_month" jdbcType="CHAR" property="statisticalMonth" />
+  </resultMap>
+  <!-- <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, bms_code, bms_ver, history_charge_times, daily_avg_charge_times, history_charge_time, 
+    daily_avg_charge_time, avg_time_charge_time, history_min_charge_time, history_max_charge_time, 
+    max_charging_voltage, max_charging_current, beforeSoc_l, beforeSoc_avg, afterSoc_h, 
+    afterSoc_avg, history_voltage_h, history_voltage_l, history_tempture_h, history_tempture_l, 
+    statistical_month
+  </sql>
+  <select id="selectByExample" parameterType="com.cpit.cpmt.security.battery.AnaBatteryOperationMonthlyAnalysisExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ana_battery_operation_monthly_analysis
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ana_battery_operation_monthly_analysis
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ana_battery_operation_monthly_analysis
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.cpit.cpmt.security.battery.AnaBatteryOperationMonthlyAnalysisExample">
+    delete from ana_battery_operation_monthly_analysis
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.cpit.cpmt.security.battery.AnaBatteryOperationMonthlyAnalysis">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ana_battery_operation_monthly_analysis (bms_code, bms_ver, history_charge_times, 
+      daily_avg_charge_times, history_charge_time, 
+      daily_avg_charge_time, avg_time_charge_time, 
+      history_min_charge_time, history_max_charge_time, 
+      max_charging_voltage, max_charging_current, beforeSoc_l, 
+      beforeSoc_avg, afterSoc_h, afterSoc_avg, 
+      history_voltage_h, history_voltage_l, history_tempture_h, 
+      history_tempture_l, statistical_month)
+    values (#{bmsCode,jdbcType=VARCHAR}, #{bmsVer,jdbcType=VARCHAR}, #{historyChargeTimes,jdbcType=INTEGER}, 
+      #{dailyAvgChargeTimes,jdbcType=INTEGER}, #{historyChargeTime,jdbcType=INTEGER}, 
+      #{dailyAvgChargeTime,jdbcType=INTEGER}, #{avgTimeChargeTime,jdbcType=INTEGER}, 
+      #{historyMinChargeTime,jdbcType=INTEGER}, #{historyMaxChargeTime,jdbcType=INTEGER}, 
+      #{maxChargingVoltage,jdbcType=REAL}, #{maxChargingCurrent,jdbcType=REAL}, #{beforesocL,jdbcType=VARCHAR}, 
+      #{beforesocAvg,jdbcType=VARCHAR}, #{aftersocH,jdbcType=VARCHAR}, #{aftersocAvg,jdbcType=VARCHAR}, 
+      #{historyVoltageH,jdbcType=REAL}, #{historyVoltageL,jdbcType=REAL}, #{historyTemptureH,jdbcType=INTEGER}, 
+      #{historyTemptureL,jdbcType=VARCHAR}, #{statisticalMonth,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cpit.cpmt.security.battery.AnaBatteryOperationMonthlyAnalysis">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ana_battery_operation_monthly_analysis
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bmsCode != null">
+        bms_code,
+      </if>
+      <if test="bmsVer != null">
+        bms_ver,
+      </if>
+      <if test="historyChargeTimes != null">
+        history_charge_times,
+      </if>
+      <if test="dailyAvgChargeTimes != null">
+        daily_avg_charge_times,
+      </if>
+      <if test="historyChargeTime != null">
+        history_charge_time,
+      </if>
+      <if test="dailyAvgChargeTime != null">
+        daily_avg_charge_time,
+      </if>
+      <if test="avgTimeChargeTime != null">
+        avg_time_charge_time,
+      </if>
+      <if test="historyMinChargeTime != null">
+        history_min_charge_time,
+      </if>
+      <if test="historyMaxChargeTime != null">
+        history_max_charge_time,
+      </if>
+      <if test="maxChargingVoltage != null">
+        max_charging_voltage,
+      </if>
+      <if test="maxChargingCurrent != null">
+        max_charging_current,
+      </if>
+      <if test="beforesocL != null">
+        beforeSoc_l,
+      </if>
+      <if test="beforesocAvg != null">
+        beforeSoc_avg,
+      </if>
+      <if test="aftersocH != null">
+        afterSoc_h,
+      </if>
+      <if test="aftersocAvg != null">
+        afterSoc_avg,
+      </if>
+      <if test="historyVoltageH != null">
+        history_voltage_h,
+      </if>
+      <if test="historyVoltageL != null">
+        history_voltage_l,
+      </if>
+      <if test="historyTemptureH != null">
+        history_tempture_h,
+      </if>
+      <if test="historyTemptureL != null">
+        history_tempture_l,
+      </if>
+      <if test="statisticalMonth != null">
+        statistical_month,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bmsCode != null">
+        #{bmsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bmsVer != null">
+        #{bmsVer,jdbcType=VARCHAR},
+      </if>
+      <if test="historyChargeTimes != null">
+        #{historyChargeTimes,jdbcType=INTEGER},
+      </if>
+      <if test="dailyAvgChargeTimes != null">
+        #{dailyAvgChargeTimes,jdbcType=INTEGER},
+      </if>
+      <if test="historyChargeTime != null">
+        #{historyChargeTime,jdbcType=INTEGER},
+      </if>
+      <if test="dailyAvgChargeTime != null">
+        #{dailyAvgChargeTime,jdbcType=INTEGER},
+      </if>
+      <if test="avgTimeChargeTime != null">
+        #{avgTimeChargeTime,jdbcType=INTEGER},
+      </if>
+      <if test="historyMinChargeTime != null">
+        #{historyMinChargeTime,jdbcType=INTEGER},
+      </if>
+      <if test="historyMaxChargeTime != null">
+        #{historyMaxChargeTime,jdbcType=INTEGER},
+      </if>
+      <if test="maxChargingVoltage != null">
+        #{maxChargingVoltage,jdbcType=REAL},
+      </if>
+      <if test="maxChargingCurrent != null">
+        #{maxChargingCurrent,jdbcType=REAL},
+      </if>
+      <if test="beforesocL != null">
+        #{beforesocL,jdbcType=VARCHAR},
+      </if>
+      <if test="beforesocAvg != null">
+        #{beforesocAvg,jdbcType=VARCHAR},
+      </if>
+      <if test="aftersocH != null">
+        #{aftersocH,jdbcType=VARCHAR},
+      </if>
+      <if test="aftersocAvg != null">
+        #{aftersocAvg,jdbcType=VARCHAR},
+      </if>
+      <if test="historyVoltageH != null">
+        #{historyVoltageH,jdbcType=REAL},
+      </if>
+      <if test="historyVoltageL != null">
+        #{historyVoltageL,jdbcType=REAL},
+      </if>
+      <if test="historyTemptureH != null">
+        #{historyTemptureH,jdbcType=INTEGER},
+      </if>
+      <if test="historyTemptureL != null">
+        #{historyTemptureL,jdbcType=VARCHAR},
+      </if>
+      <if test="statisticalMonth != null">
+        #{statisticalMonth,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.cpit.cpmt.security.battery.AnaBatteryOperationMonthlyAnalysisExample" resultType="java.lang.Long">
+    select count(*) from ana_battery_operation_monthly_analysis
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update ana_battery_operation_monthly_analysis
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.bmsCode != null">
+        bms_code = #{record.bmsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bmsVer != null">
+        bms_ver = #{record.bmsVer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.historyChargeTimes != null">
+        history_charge_times = #{record.historyChargeTimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.dailyAvgChargeTimes != null">
+        daily_avg_charge_times = #{record.dailyAvgChargeTimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.historyChargeTime != null">
+        history_charge_time = #{record.historyChargeTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.dailyAvgChargeTime != null">
+        daily_avg_charge_time = #{record.dailyAvgChargeTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.avgTimeChargeTime != null">
+        avg_time_charge_time = #{record.avgTimeChargeTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.historyMinChargeTime != null">
+        history_min_charge_time = #{record.historyMinChargeTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.historyMaxChargeTime != null">
+        history_max_charge_time = #{record.historyMaxChargeTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.maxChargingVoltage != null">
+        max_charging_voltage = #{record.maxChargingVoltage,jdbcType=REAL},
+      </if>
+      <if test="record.maxChargingCurrent != null">
+        max_charging_current = #{record.maxChargingCurrent,jdbcType=REAL},
+      </if>
+      <if test="record.beforesocL != null">
+        beforeSoc_l = #{record.beforesocL,jdbcType=VARCHAR},
+      </if>
+      <if test="record.beforesocAvg != null">
+        beforeSoc_avg = #{record.beforesocAvg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.aftersocH != null">
+        afterSoc_h = #{record.aftersocH,jdbcType=VARCHAR},
+      </if>
+      <if test="record.aftersocAvg != null">
+        afterSoc_avg = #{record.aftersocAvg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.historyVoltageH != null">
+        history_voltage_h = #{record.historyVoltageH,jdbcType=REAL},
+      </if>
+      <if test="record.historyVoltageL != null">
+        history_voltage_l = #{record.historyVoltageL,jdbcType=REAL},
+      </if>
+      <if test="record.historyTemptureH != null">
+        history_tempture_h = #{record.historyTemptureH,jdbcType=INTEGER},
+      </if>
+      <if test="record.historyTemptureL != null">
+        history_tempture_l = #{record.historyTemptureL,jdbcType=VARCHAR},
+      </if>
+      <if test="record.statisticalMonth != null">
+        statistical_month = #{record.statisticalMonth,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update ana_battery_operation_monthly_analysis
+    set id = #{record.id,jdbcType=INTEGER},
+      bms_code = #{record.bmsCode,jdbcType=VARCHAR},
+      bms_ver = #{record.bmsVer,jdbcType=VARCHAR},
+      history_charge_times = #{record.historyChargeTimes,jdbcType=INTEGER},
+      daily_avg_charge_times = #{record.dailyAvgChargeTimes,jdbcType=INTEGER},
+      history_charge_time = #{record.historyChargeTime,jdbcType=INTEGER},
+      daily_avg_charge_time = #{record.dailyAvgChargeTime,jdbcType=INTEGER},
+      avg_time_charge_time = #{record.avgTimeChargeTime,jdbcType=INTEGER},
+      history_min_charge_time = #{record.historyMinChargeTime,jdbcType=INTEGER},
+      history_max_charge_time = #{record.historyMaxChargeTime,jdbcType=INTEGER},
+      max_charging_voltage = #{record.maxChargingVoltage,jdbcType=REAL},
+      max_charging_current = #{record.maxChargingCurrent,jdbcType=REAL},
+      beforeSoc_l = #{record.beforesocL,jdbcType=VARCHAR},
+      beforeSoc_avg = #{record.beforesocAvg,jdbcType=VARCHAR},
+      afterSoc_h = #{record.aftersocH,jdbcType=VARCHAR},
+      afterSoc_avg = #{record.aftersocAvg,jdbcType=VARCHAR},
+      history_voltage_h = #{record.historyVoltageH,jdbcType=REAL},
+      history_voltage_l = #{record.historyVoltageL,jdbcType=REAL},
+      history_tempture_h = #{record.historyTemptureH,jdbcType=INTEGER},
+      history_tempture_l = #{record.historyTemptureL,jdbcType=VARCHAR},
+      statistical_month = #{record.statisticalMonth,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cpit.cpmt.security.battery.AnaBatteryOperationMonthlyAnalysis">
+    update ana_battery_operation_monthly_analysis
+    <set>
+      <if test="bmsCode != null">
+        bms_code = #{bmsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bmsVer != null">
+        bms_ver = #{bmsVer,jdbcType=VARCHAR},
+      </if>
+      <if test="historyChargeTimes != null">
+        history_charge_times = #{historyChargeTimes,jdbcType=INTEGER},
+      </if>
+      <if test="dailyAvgChargeTimes != null">
+        daily_avg_charge_times = #{dailyAvgChargeTimes,jdbcType=INTEGER},
+      </if>
+      <if test="historyChargeTime != null">
+        history_charge_time = #{historyChargeTime,jdbcType=INTEGER},
+      </if>
+      <if test="dailyAvgChargeTime != null">
+        daily_avg_charge_time = #{dailyAvgChargeTime,jdbcType=INTEGER},
+      </if>
+      <if test="avgTimeChargeTime != null">
+        avg_time_charge_time = #{avgTimeChargeTime,jdbcType=INTEGER},
+      </if>
+      <if test="historyMinChargeTime != null">
+        history_min_charge_time = #{historyMinChargeTime,jdbcType=INTEGER},
+      </if>
+      <if test="historyMaxChargeTime != null">
+        history_max_charge_time = #{historyMaxChargeTime,jdbcType=INTEGER},
+      </if>
+      <if test="maxChargingVoltage != null">
+        max_charging_voltage = #{maxChargingVoltage,jdbcType=REAL},
+      </if>
+      <if test="maxChargingCurrent != null">
+        max_charging_current = #{maxChargingCurrent,jdbcType=REAL},
+      </if>
+      <if test="beforesocL != null">
+        beforeSoc_l = #{beforesocL,jdbcType=VARCHAR},
+      </if>
+      <if test="beforesocAvg != null">
+        beforeSoc_avg = #{beforesocAvg,jdbcType=VARCHAR},
+      </if>
+      <if test="aftersocH != null">
+        afterSoc_h = #{aftersocH,jdbcType=VARCHAR},
+      </if>
+      <if test="aftersocAvg != null">
+        afterSoc_avg = #{aftersocAvg,jdbcType=VARCHAR},
+      </if>
+      <if test="historyVoltageH != null">
+        history_voltage_h = #{historyVoltageH,jdbcType=REAL},
+      </if>
+      <if test="historyVoltageL != null">
+        history_voltage_l = #{historyVoltageL,jdbcType=REAL},
+      </if>
+      <if test="historyTemptureH != null">
+        history_tempture_h = #{historyTemptureH,jdbcType=INTEGER},
+      </if>
+      <if test="historyTemptureL != null">
+        history_tempture_l = #{historyTemptureL,jdbcType=VARCHAR},
+      </if>
+      <if test="statisticalMonth != null">
+        statistical_month = #{statisticalMonth,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cpit.cpmt.security.battery.AnaBatteryOperationMonthlyAnalysis">
+    update ana_battery_operation_monthly_analysis
+    set bms_code = #{bmsCode,jdbcType=VARCHAR},
+      bms_ver = #{bmsVer,jdbcType=VARCHAR},
+      history_charge_times = #{historyChargeTimes,jdbcType=INTEGER},
+      daily_avg_charge_times = #{dailyAvgChargeTimes,jdbcType=INTEGER},
+      history_charge_time = #{historyChargeTime,jdbcType=INTEGER},
+      daily_avg_charge_time = #{dailyAvgChargeTime,jdbcType=INTEGER},
+      avg_time_charge_time = #{avgTimeChargeTime,jdbcType=INTEGER},
+      history_min_charge_time = #{historyMinChargeTime,jdbcType=INTEGER},
+      history_max_charge_time = #{historyMaxChargeTime,jdbcType=INTEGER},
+      max_charging_voltage = #{maxChargingVoltage,jdbcType=REAL},
+      max_charging_current = #{maxChargingCurrent,jdbcType=REAL},
+      beforeSoc_l = #{beforesocL,jdbcType=VARCHAR},
+      beforeSoc_avg = #{beforesocAvg,jdbcType=VARCHAR},
+      afterSoc_h = #{aftersocH,jdbcType=VARCHAR},
+      afterSoc_avg = #{aftersocAvg,jdbcType=VARCHAR},
+      history_voltage_h = #{historyVoltageH,jdbcType=REAL},
+      history_voltage_l = #{historyVoltageL,jdbcType=REAL},
+      history_tempture_h = #{historyTemptureH,jdbcType=INTEGER},
+      history_tempture_l = #{historyTemptureL,jdbcType=VARCHAR},
+      statistical_month = #{statisticalMonth,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update> -->
+</mapper>

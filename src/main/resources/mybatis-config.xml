@@ -80,6 +80,15 @@
        	<mapper resource="mappings/security/DangerFileDao.xml"/>
        	<mapper resource="mappings/security/MessageRemindDao.xml"/>
 		<mapper resource="mappings/security/EquipmentSafeWarningDao.xml"/>
+		<!-- battery begin -->
+	    <mapper resource="mappings/security/battery/AnaBmsSingleChargeDao.xml"/>
+	    <mapper resource="mappings/security/battery/AnaBmsDayChargeDao.xml"/>
+	    <mapper resource="mappings/security/battery/AnaBmsWeekChargeDao.xml"/>
+	    <mapper resource="mappings/security/battery/AnaBmsMonthChargeDao.xml"/>
+	    <mapper resource="mappings/security/battery/AnaBmsSeasonChargeDao.xml"/>
+	    <mapper resource="mappings/security/battery/AnaBmsYearChargeDao.xml"/>
+	    <mapper resource="mappings/security/battery/AnaBmsSingleChargeWarningResultDao.xml"/>
+	    <!-- battery end -->
        <!-- security end -->
 		 
 		<!-- message begin -->
@@ -146,16 +155,5 @@
 	    <!-- measure begin -->
 		<mapper resource="mappings/measure/ConnectorChargeDao.xml" />
 		<!-- measure end -->
-	    
-	    <!-- battery begin -->
-	    <mapper resource="mappings/battery/AnaBmsSingleChargeDao.xml"/>
-	    <mapper resource="mappings/battery/AnaBmsDayChargeDao.xml"/>
-	    <mapper resource="mappings/battery/AnaBmsWeekChargeDao.xml"/>
-	    <mapper resource="mappings/battery/AnaBmsMonthChargeDao.xml"/>
-	    <mapper resource="mappings/battery/AnaBmsSeasonChargeDao.xml"/>
-	    <mapper resource="mappings/battery/AnaBmsYearChargeDao.xml"/>
-	    <mapper resource="mappings/battery/AnaBmsSingleChargeWarningResultDao.xml"/>
-	    <!-- battery end -->
-	</mappers>
-
+	 </mappers> 
 </configuration>

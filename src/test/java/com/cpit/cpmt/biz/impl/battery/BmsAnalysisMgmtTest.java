@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -17,20 +16,21 @@ import com.bbap.model.BmsInfo;
 import com.bbap.model.TotalResponse;
 import com.bbap.model.WarningResult;
 import com.bbap.rest.CountRest;
+import com.bbap.util.BbapBatterySoh;
 import com.bbap.util.CountUtil;
 import com.bbap.util.PmmlUtil;
+import com.bbap.util.WarningCount;
 import com.cpit.cpmt.biz.main.Application;
-import com.cpit.cpmt.dto.battery.AnaBmsSingleCharge;
 
 @RunWith(SpringRunner.class)
-@Import({CountRest.class,CountUtil.class,PmmlUtil.class})
+@Import({CountRest.class,CountUtil.class,PmmlUtil.class,WarningCount.class,BbapBatterySoh.class})
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class BmsAnalysisMgmtTest {
 	@Autowired
 	CountRest countRest;
 	
 	//调用分析接口
-	@Test
+	/*@Test
 	public void  obtainBmsAnalysisResult() {
 		
 		List<BmsInfo> list = new ArrayList<>();
@@ -77,7 +77,7 @@ public class BmsAnalysisMgmtTest {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-	}
+	}*/
 	
 /*	输出结果:
  * 			bMSCode=1
@@ -98,48 +98,48 @@ public class BmsAnalysisMgmtTest {
 */	
 	
 	//调用告警接口
-	@Test
-	public void  obtainAnalysisByWarning() {
-		
-		List<BmsInfo> list = new ArrayList<>();
-		Date d = new Date();
-		for (int i = 0; i < 10; i++) {
-		    BmsInfo c = new BmsInfo();//必须用第三方定义的BmsInfo类,不能使用采集的定义的类.
-		    c.setbMSCode("1");
-		    c.setbMSVer("1");
-		    c.setMaxChargeCellVoltage(400 + "");
-		    c.setMaxChargeCurrent(200 + "");
-		    c.setMaxTemp((int) (55) + "");
-		    c.setRatedCapacity(130 + "");
-		    c.setTatalVoltage(200 + Math.random() * 100 + "");
-		    c.setTotalCurrent(Math.random() * 100 + "");
-		    c.setSoc((int) (Math.random() * 100) + "");
-		    c.setVoltageH(3 + Math.random() + "");
-		    c.setVoltageL(2 + Math.random()+ "");
-		    c.setTemptureH((int) (30 + Math.random() * 10) + "");
-		    c.setTemptureL((int) (20 + Math.random() * 10) + "");
-		    c.setStartTime(d);
-		    c.setEndTime(new Date(d.getTime() + 1000 * i));
-		    list.add(c);
-		}
-		List<WarningResult> resList;
-		try {
-				resList = countRest.analysisByWarning(list);
-				for (WarningResult warningResult : resList) {
-					System.out.println("--------------遍历打印结果集-------------------");
-					System.out.println("bMSCode="+warningResult.getbMSCode());
-					System.out.println("bMSVer="+warningResult.getbMSVer());
-					System.out.println("warningDesc="+warningResult.getWarningDesc());
-					System.out.println("warningCode="+warningResult.getWarningCode());
-					System.out.println("warningLevel="+warningResult.getWarningLevel());
-					System.out.println("warningNum="+warningResult.getWarningNum());
-					System.out.println("startTime="+warningResult.getStartTime());
-					System.out.println("endTime="+warningResult.getEndTime());
-				}
-			} catch (Exception e) {
-				System.out.println(e);
-			}
-	}
+//	@Test
+//	public void  obtainAnalysisByWarning() {
+//		
+//		List<BmsInfo> list = new ArrayList<>();
+//		Date d = new Date();
+//		for (int i = 0; i < 10; i++) {
+//		    BmsInfo c = new BmsInfo();//必须用第三方定义的BmsInfo类,不能使用采集的定义的类.
+//		    c.setbMSCode("1");
+//		    c.setbMSVer("1");
+//		    c.setMaxChargeCellVoltage(400 + "");
+//		    c.setMaxChargeCurrent(200 + "");
+//		    c.setMaxTemp((int) (55) + "");
+//		    c.setRatedCapacity(130 + "");
+//		    c.setTatalVoltage(200 + Math.random() * 100 + "");
+//		    c.setTotalCurrent(Math.random() * 100 + "");
+//		    c.setSoc((int) (Math.random() * 100) + "");
+//		    c.setVoltageH(3 + Math.random() + "");
+//		    c.setVoltageL(2 + Math.random()+ "");
+//		    c.setTemptureH((int) (30 + Math.random() * 10) + "");
+//		    c.setTemptureL((int) (20 + Math.random() * 10) + "");
+//		    c.setStartTime(d);
+//		    c.setEndTime(new Date(d.getTime() + 1000 * i));
+//		    list.add(c);
+//		}
+//		List<WarningResult> resList;
+//		try {
+//				resList = countRest.analysisByWarning(list);
+//				for (WarningResult warningResult : resList) {
+//					System.out.println("--------------遍历打印结果集-------------------");
+//					System.out.println("bMSCode="+warningResult.getbMSCode());
+//					System.out.println("bMSVer="+warningResult.getbMSVer());
+//					System.out.println("warningDesc="+warningResult.getWarningDesc());
+//					System.out.println("warningCode="+warningResult.getWarningCode());
+//					System.out.println("warningLevel="+warningResult.getWarningLevel());
+//					System.out.println("warningNum="+warningResult.getWarningNum());
+//					System.out.println("startTime="+warningResult.getStartTime());
+//					System.out.println("endTime="+warningResult.getEndTime());
+//				}
+//			} catch (Exception e) {
+//				System.out.println(e);
+//			}
+//	}
 	/**
 	 * 输出结果为:
 	 * --------------遍历打印结果集-------------------
@@ -206,7 +206,7 @@ public class BmsAnalysisMgmtTest {
 		List<BmsInfo> list = new ArrayList<>();
 		Date d = new Date();
 		for (int i = 0; i < 10; i++) {
-		    BmsInfo c = new BmsInfo();//必须用第三方定义的BmsInfo类,不能使用采集的定义的类.
+		    BmsInfo c = new BmsInfo();
 		    c.setbMSCode("1");
 		    c.setbMSVer("1");
 		    c.setMaxChargeCellVoltage(400 + "");
@@ -227,6 +227,10 @@ public class BmsAnalysisMgmtTest {
 		TotalResponse tr;
 		try {
 				tr = countRest.analysisAll(list);
+				
+				System.out.println("------------analysisAll打印响应结果等信息-------------");
+				System.out.println("code="+tr.getCode());
+				System.out.println("msg="+tr.getMsg());
 				BmsAnalysisResult resp = tr.getBmsAnalysisResult();//获取分析结果
 				System.out.println("------------打印分析结果-------------");
 				System.out.println("bMSCode="+resp.getbMSCode());
@@ -257,6 +261,15 @@ public class BmsAnalysisMgmtTest {
 					System.out.println("startTime="+warningResult.getStartTime());
 					System.out.println("endTime="+warningResult.getEndTime());
 				}
+				
+				//多组综合打分计算结果
+				int[] value = {10, 20, 15, 12, 23,27,25,25,28};
+				BmsAnalysisResult avgHealthScore = countRest.avgHealthScore(value);//value综合打分评价数组
+				System.out.println("------------avgHealthScore打印响应结果等信息-------------");
+				System.out.println("code="+tr.getCode());
+				System.out.println("msg="+tr.getMsg());
+				Integer sOH = avgHealthScore.getsOH();
+				System.out.println("综合打分评价值sOH"+sOH);
 			} catch (Exception e) {
 				System.out.println(e);
 			}
