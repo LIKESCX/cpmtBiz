@@ -120,8 +120,8 @@ public class BatteryAnalysisController {
 			//param.setStatisticalSeason("202001");
 			param.setStatisticalYear("2020");
 			//test end
-			 Map<String,Object> mapResult = batteryAnalysisMgmt.queryBatteryWarningAbnormalMonthlyAnalysis(param);
-			 return new ResultInfo(ResultInfo.OK, mapResult);
+			Map<String,Object> mapResult = batteryAnalysisMgmt.queryBatteryWarningAbnormalMonthlyAnalysis(param);
+			return new ResultInfo(ResultInfo.OK, mapResult);
 		} catch (Exception e) {
 			logger.error("queryMonthHistoricalOperationAnalysis_error"+e);
 			return new ResultInfo(ResultInfo.FAIL, new ErrorMsg(ErrorMsg.ERR_SYSTEM_ERROR, e.getMessage()));

@@ -15,11 +15,18 @@
     <result column="alarm_status" jdbcType="VARCHAR" property="alarmStatus" />
     <result column="alarm_code" jdbcType="VARCHAR" property="alarmCode" />
     <result column="alarm_type" jdbcType="VARCHAR" property="alarmType" />
+    <result column="alarmTypeTimes" jdbcType="VARCHAR" property="alarmTypeTimes" />
     <result column="alarm_level" jdbcType="VARCHAR" property="alarmLevel" />
     <result column="alarm_time" jdbcType="TIMESTAMP" property="alarmTime" />
     <result column="note_string" jdbcType="VARCHAR" property="noteString" />
     <result column="received_time" jdbcType="TIMESTAMP" property="receivedTime" />
     <result column="in_time" jdbcType="TIMESTAMP" property="inTime" />
+    <result column="statisticalHour" jdbcType="CHAR" property="statisticalHour" />
+    <result column="statistical_day" jdbcType="CHAR" property="statisticalDay" />
+    <result column="statistical_week" jdbcType="CHAR" property="statisticalWeek" />
+    <result column="statistical_month" jdbcType="CHAR" property="statisticalMonth" />
+    <result column="statistical_season" jdbcType="CHAR" property="statisticalSeason" />
+    <result column="commonStatisticalTime" jdbcType="CHAR" property="commonStatisticalTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -315,5 +322,165 @@
     <include refid="Base_Column_List" />
     from exc_alarm_info
     where equipment_id=#{equipmentId} and operator_id=#{operatorId}
+  </select>
+  
+  <select id="queryFirstLevelHourAbnormalAlarmData" resultMap="BaseResultMap">
+  	SELECT
+  		alarm_type,
+  		COUNT(alarm_type) AS alarmTypeTimes,
+  		DATE_FORMAT(alarm_time, '%Y-%m-%d %H') AS commonStatisticalTime
+  		
+  	FROM  
+  		exc_alarm_info
+  	WHERE
+  		DATE_FORMAT(alarm_time, '%Y-%m-%d %H') 
+  		BETWEEN DATE_FORMAT(
+					#{param.startTime},
+					'%Y-%m-%d %H'
+		)
+		AND  DATE_FORMAT(
+			#{param.endTime},
+			'%Y-%m-%d %H'
+		)
+  		<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+			AND operator_id = #{param.operatorId}
+		</if>
+		 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+			AND	station_id = #{param.stationId}	
+		</if>
+		<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+			AND equipment_id = #{param.equipmentId}
+		</if>
+		<if test="param.alarmStatus==0 or param.alarmStatus==1"><!-- 告警状态 0-恢复,1-发生,2-全部 -->
+			AND alarm_status = #{param.alarmStatus}
+		</if>
+		<if test="param.alarmType==1 or param.alarmType==2 or param.alarmType==3"><!-- 故障告警类型 1-充电系统故障，2-电池系统故障，3-配电系统故障，4全部 -->
+			AND alarm_type = #{param.alarmType}
+		</if>
+		<if test="param.alarmLevel==1 or param.alarmLevel==2 or param.alarmLevel==3"><!-- 故障级别分类 1-人身安全级，2-设备安全级，3-告警提示级，4全部 -->
+			AND alarm_level = #{param.alarmLevel}
+		</if>
+		GROUP BY alarm_type,DATE_FORMAT(alarm_time, '%Y-%m-%d %H')
+		ORDER BY alarm_time ASC
+  </select>
+  <select id="queryFirstLevelDayAbnormalAlarmData" resultMap="BaseResultMap">
+  	SELECT
+  		alarm_type,
+  		COUNT(alarm_type) AS alarmTypeTimes,
+  		statistical_day AS commonStatisticalTime
+  	FROM  
+  		exc_alarm_info
+  	WHERE
+  		 statistical_day BETWEEN #{param.startStatisticalDay} AND #{param.endStatisticalDay}
+  		<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+			AND operator_id = #{param.operatorId}
+		</if>
+		 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+			AND	station_id = #{param.stationId}	
+		</if>
+		<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+			AND equipment_id = #{param.equipmentId}
+		</if>
+		<if test="param.alarmStatus==0 or param.alarmStatus==1"><!-- 告警状态 0-恢复,1-发生,2-全部 -->
+			AND alarm_status = #{param.alarmStatus}
+		</if>
+		<if test="param.alarmType==1 or param.alarmType==2 or param.alarmType==3"><!-- 故障告警类型 1-充电系统故障，2-电池系统故障，3-配电系统故障，4全部 -->
+			AND alarm_type = #{param.alarmType}
+		</if>
+		<if test="param.alarmLevel==1 or param.alarmLevel==2 or param.alarmLevel==3"><!-- 故障级别分类 1-人身安全级，2-设备安全级，3-告警提示级，4全部 -->
+			AND alarm_level = #{param.alarmLevel}
+		</if>
+		GROUP BY alarm_type,statistical_day
+		ORDER BY statistical_day ASC
+  </select>
+  <select id="queryFirstLevelWeekAbnormalAlarmData" resultMap="BaseResultMap">
+  	SELECT
+  		alarm_type,
+  		COUNT(alarm_type) AS alarmTypeTimes,
+  		statistical_week AS commonStatisticalTime
+  	FROM  
+  		exc_alarm_info
+  	WHERE
+  		statistical_week BETWEEN #{param.startStatisticalWeek} AND #{param.endStatisticalWeek}
+  		<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+			AND operator_id = #{param.operatorId}
+		</if>
+		 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+			AND	station_id = #{param.stationId}	
+		</if>
+		<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+			AND equipment_id = #{param.equipmentId}
+		</if>
+		<if test="param.alarmStatus==0 or param.alarmStatus==1"><!-- 告警状态 0-恢复,1-发生,2-全部 -->
+			AND alarm_status = #{param.alarmStatus}
+		</if>
+		<if test="param.alarmType==1 or param.alarmType==2 or param.alarmType==3"><!-- 故障告警类型 1-充电系统故障，2-电池系统故障，3-配电系统故障，4全部 -->
+			AND alarm_type = #{param.alarmType}
+		</if>
+		<if test="param.alarmLevel==1 or param.alarmLevel==2 or param.alarmLevel==3"><!-- 故障级别分类 1-人身安全级，2-设备安全级，3-告警提示级，4全部 -->
+			AND alarm_level = #{param.alarmLevel}
+		</if>
+		GROUP BY alarm_type,statistical_week
+		ORDER BY statistical_week ASC
+  </select>
+  <select id="queryFirstLevelMonthAbnormalAlarmData" resultMap="BaseResultMap">
+  	SELECT
+  		alarm_type,
+  		COUNT(alarm_type) AS alarmTypeTimes,
+  		statistical_month AS commonStatisticalTime
+  	FROM  
+  		exc_alarm_info
+  	WHERE
+  		statistical_month BETWEEN #{param.startStatisticalMonth} AND #{param.endStatisticalMonth}
+  		<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+			AND operator_id = #{param.operatorId}
+		</if>
+		 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+			AND	station_id = #{param.stationId}	
+		</if>
+		<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+			AND equipment_id = #{param.equipmentId}
+		</if>
+		<if test="param.alarmStatus==0 or param.alarmStatus==1"><!-- 告警状态 0-恢复,1-发生,2-全部 -->
+			AND alarm_status = #{param.alarmStatus}
+		</if>
+		<if test="param.alarmType==1 or param.alarmType==2 or param.alarmType==3"><!-- 故障告警类型 1-充电系统故障，2-电池系统故障，3-配电系统故障，4全部 -->
+			AND alarm_type = #{param.alarmType}
+		</if>
+		<if test="param.alarmLevel==1 or param.alarmLevel==2 or param.alarmLevel==3"><!-- 故障级别分类 1-人身安全级，2-设备安全级，3-告警提示级，4全部 -->
+			AND alarm_level = #{param.alarmLevel}
+		</if>
+		GROUP BY alarm_type,statistical_month
+		ORDER BY statistical_month ASC
+  </select>
+  <select id="queryFirstLevelSeasonAbnormalAlarmData" resultMap="BaseResultMap">
+  	SELECT
+  		alarm_type,
+  		COUNT(alarm_type) AS alarmTypeTimes,
+  		statistical_season AS commonStatisticalTime
+  	FROM  
+  		exc_alarm_info
+  	WHERE
+  		statistical_season BETWEEN #{param.startStatisticalSeason} AND #{param.endStatisticalSeason}
+  		<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+			AND operator_id = #{param.operatorId}
+		</if>
+		 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+			AND	station_id = #{param.stationId}	
+		</if>
+		<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+			AND equipment_id = #{param.equipmentId}
+		</if>
+		<if test="param.alarmStatus==0 or param.alarmStatus==1"><!-- 告警状态 0-恢复,1-发生,2-全部 -->
+			AND alarm_status = #{param.alarmStatus}
+		</if>
+		<if test="param.alarmType==1 or param.alarmType==2 or param.alarmType==3"><!-- 故障告警类型 1-充电系统故障，2-电池系统故障，3-配电系统故障，4全部 -->
+			AND alarm_type = #{param.alarmType}
+		</if>
+		<if test="param.alarmLevel==1 or param.alarmLevel==2 or param.alarmLevel==3"><!-- 故障级别分类 1-人身安全级，2-设备安全级，3-告警提示级，4全部 -->
+			AND alarm_level = #{param.alarmLevel}
+		</if>
+		GROUP BY alarm_type,statistical_season
+		ORDER BY statistical_season ASC
   </select>
 </mapper>

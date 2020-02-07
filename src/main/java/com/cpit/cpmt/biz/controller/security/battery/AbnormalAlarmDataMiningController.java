@@ -1,62 +1,59 @@
 package com.cpit.cpmt.biz.controller.security.battery;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cpit.common.TimeConvertor;
-import com.cpit.common.db.Page;
-import com.cpit.common.db.PageHelper;
-import com.cpit.cpmt.biz.impl.security.battery.BatteryDataTrackingAssessmentMgmt;
+import com.cpit.cpmt.biz.impl.security.battery.AbnormalAlarmDataMiningMgmt;
 import com.cpit.cpmt.dto.common.ErrorMsg;
 import com.cpit.cpmt.dto.common.ResultInfo;
-import com.cpit.cpmt.dto.security.battery.AnaBmsSingleCharge;
-import com.cpit.cpmt.dto.security.battery.BatteryDataTrackingAssessmentConditions;
-//2.2.	电池数据跟踪评估
+import com.cpit.cpmt.dto.exchange.basic.AlarmInfo;
+import com.cpit.cpmt.dto.security.battery.AbnormalAlarmDataMiningConditions;
+import com.cpit.cpmt.dto.security.battery.AbnormalAlarmDataMiningDto;
+//2.3.	异常告警数据挖掘分析
 @RestController
 @RequestMapping("/security/battery")
-public class BatteryDataTrackingAssessmentController {
-	private final static Logger logger = LoggerFactory.getLogger(BatteryDataTrackingAssessmentController.class);
+public class AbnormalAlarmDataMiningController {
+	private final static Logger logger = LoggerFactory.getLogger(AbnormalAlarmDataMiningController.class);
 	
 	@Autowired
-	private BatteryDataTrackingAssessmentMgmt batteryDataTrackingAssessmentMgmt;
+	private AbnormalAlarmDataMiningMgmt abnormalAlarmDataMiningMgmt;
 		//-------------------------------------2.2.	电池数据跟踪评估 内容一--------------------------
 	/**
-	 * 第一级钻取：
-	 * 	     按查询条件统计某车辆在某时间段内充电次数；
-	 * 	     生成散点图呈现不同时间段内充电次数，x轴为时间，y轴为次数，
+	 * 内容一：
+	 * 	第一级钻取：
+	 * 	按查询条件生成故障告警类型柱状图，横坐标表示时间，纵坐标统计一种或多种故障告警类型的数量；
 	 */
-	@RequestMapping("/queryFirstLevelData")
-	public ResultInfo queryFirstLevelData(@RequestBody BatteryDataTrackingAssessmentConditions param) {
-		logger.info("queryFirstLevelData begin params [{}]", param);
+	@RequestMapping("/queryFirstLevelAbnormalAlarmData")
+	public ResultInfo queryFirstLevelAbnormalAlarmData(@RequestBody AbnormalAlarmDataMiningConditions param) {
+		logger.info("queryFirstLevelAbnormalAlarmData begin params [{}]", param);
 		try {
 			//test start
-			Date startTime =TimeConvertor.stringTime2Date("2020-02-03 19:29:40","yyyy-MM-dd HH:mm:ss");
-			Date endTime =TimeConvertor.stringTime2Date("2020-02-03 20:33:37","yyyy-MM-dd HH:mm:ss");
+			Date startTime =TimeConvertor.stringTime2Date("2019-05-28 15:10:54","yyyy-MM-dd HH:mm:ss");
+			Date endTime =TimeConvertor.stringTime2Date("2019-10-24 20:44:42","yyyy-MM-dd HH:mm:ss");
 			param.setStartTime(startTime);
 			param.setEndTime(endTime); 
-			param.setAllOperators(0);//0表示单选 1表示多选
+			param.setAllOperators(1);//0表示单选 1表示多选
 			param.setOperatorId("10086");
-			param.setAllStations(0);
+			param.setAllStations(1);//0表示单选 1表示多选
 			param.setStationId("1008601");
-			param.setAllEquipments(1);
+			param.setAllEquipments(1);//0表示单选 1表示多选
 			param.setEquipmentId("10086001");
-			param.setTimeGranularity(5);
-			param.setbMSCode("1");
+			param.setTimeGranularity(1);//1.小时、2.天、3.周、4.月、5.季
+			param.setAlarmStatus(1);	//告警状态 0-恢复,1-发生,2-全部
+			param.setAlarmType(1);		//故障告警类型 1-充电系统故障，2-电池系统故障，3-配电系统故障，4全部
+			param.setAlarmLevel(4);		//故障级别分类 1-人身安全级，2-设备安全级，3-告警提示级，4全部
+			//param.setbMSCode("1");
 			//test end
-			Object obj = batteryDataTrackingAssessmentMgmt.queryFirstLevelData(param);
-			return new ResultInfo(ResultInfo.OK, obj);
+			List<AbnormalAlarmDataMiningDto> infoList = abnormalAlarmDataMiningMgmt.queryFirstLevelAbnormalAlarmData(param);
+			return new ResultInfo(ResultInfo.OK, infoList);
 		} catch (Exception e) {
 			logger.error("queryFirstLevelData_error"+e);
 			return new ResultInfo(ResultInfo.FAIL, new ErrorMsg(ErrorMsg.ERR_SYSTEM_ERROR, e.getMessage()));
@@ -68,7 +65,7 @@ public class BatteryDataTrackingAssessmentController {
 		点击统计次数，向下钻取对应时间内容的充电详细列表，需要传递 本次统计次数所对应的时间点,粒度,电池编码,运营商id,设备接口编码
 		输出包括开始时间、结束时间、充电站名称、运营商名称、设备编码、型号等信息，以列表展现；
 	 */
-	@RequestMapping("/querySecondLevelData/{pageNumber}/{pageSize}")
+	/*@RequestMapping("/querySecondLevelData/{pageNumber}/{pageSize}")
 	public ResultInfo querySecondLevelData(
 			@PathVariable("pageNumber") Integer pageNumber,
 			@PathVariable("pageSize") Integer pageSize,
@@ -101,12 +98,12 @@ public class BatteryDataTrackingAssessmentController {
 			logger.error("querySecondLevelData_error"+e);
 			return new ResultInfo(ResultInfo.FAIL, new ErrorMsg(ErrorMsg.ERR_SYSTEM_ERROR, e.getMessage()));
 		}
-	}
+	}*/
 	/**
 	 * 第三级钻取：需要传递 开始充电时间和结束充电时间,电池编码,运营商id,设备接口id
 		选中某条第二级钻取充电详情，获取此充电过程的信息，统计数据分析指标值。
 	 */
-	@RequestMapping("/queryThirdLevelData")
+	/*@RequestMapping("/queryThirdLevelData")
 	public ResultInfo queryThirdLevelData(@RequestBody BatteryDataTrackingAssessmentConditions param) {
 		logger.info("queryThirdLevelData begin params [{}],", param);
 		try {
@@ -126,7 +123,7 @@ public class BatteryDataTrackingAssessmentController {
 			return new ResultInfo(ResultInfo.FAIL, new ErrorMsg(ErrorMsg.ERR_SYSTEM_ERROR, e.getMessage()));
 
 		}
-	}
+	}*/
 	
 	//-------------------------------------2.2.	电池数据跟踪评估 内容二--------------------------
 	

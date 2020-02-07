@@ -498,11 +498,12 @@
 			ana_bms_single_charge
 		<where>
 			bms_code = #{param.bMSCode}
-			AND	DATE_FORMAT(endTime, '%Y-%m-%d %H') BETWEEN DATE_FORMAT(
+			AND	DATE_FORMAT(endTime, '%Y-%m-%d %H')
+			BETWEEN DATE_FORMAT(
 					#{param.startTime},
 					'%Y-%m-%d %H'
 				)
-			AND DATE_FORMAT(endTime, '%Y-%m-%d %H') AND DATE_FORMAT(
+			AND  DATE_FORMAT(
 				#{param.endTime},
 				'%Y-%m-%d %H'
 			)
