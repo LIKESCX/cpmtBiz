@@ -331,4 +331,62 @@
 			AND statistical_year = #{param.statisticalYear,jdbcType=CHAR}
 		GROUP BY bMS_code,statistical_year,warning_level
   </select>
+  
+  <select id="queryBatteryAlarmTimesStatistics" resultType="com.cpit.cpmt.dto.security.battery.BatteryWarningAbnormalMonthlyAnalysis">
+  	  SELECT
+			warning_code AS warningCode,
+			COUNT(warning_code) AS warningCodeTimes
+		FROM
+			`ana_bms_single_charge_warning_result`
+		WHERE
+			bMS_code = #{param.bMSCode,jdbcType=VARCHAR}
+		<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+			AND operator_id = #{param.operatorId}
+		</if>
+		 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+			AND	station_id = #{param.stationId}	
+		</if>
+		<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+			AND equipment_id = #{param.equipmentId}
+		</if>
+		<if test="param.timeGranularity == 4">
+       		AND statistical_month = #{param.statisticalMonth}
+     	</if>
+		<if test="param.timeGranularity == 5">
+       		AND statistical_season = #{param.statisticalSeason}
+     	</if>
+		<if test="param.timeGranularity == 6">
+       		AND statistical_year = #{param.statisticalYear}
+     	</if>
+		GROUP BY warning_code
+  </select>
+  
+  <select id="queryBatteryAlarmLevelDistribution" resultType="com.cpit.cpmt.dto.security.battery.BatteryWarningAbnormalMonthlyAnalysis">
+  	  SELECT
+			warning_level AS warningLevel,
+			COUNT(warning_level) AS warningLevelTimes
+		FROM
+			`ana_bms_single_charge_warning_result`
+		WHERE
+			bMS_code = #{param.bMSCode,jdbcType=VARCHAR}
+		<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+			AND operator_id = #{param.operatorId}
+		</if>
+		 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+			AND	station_id = #{param.stationId}	
+		</if>
+		<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+			AND equipment_id = #{param.equipmentId}
+		</if>
+		<if test="param.timeGranularity == 4">
+       		AND statistical_month = #{param.statisticalMonth}
+     	</if>
+		<if test="param.timeGranularity == 5">
+       		AND statistical_season = #{param.statisticalSeason}
+     	</if>
+		<if test="param.timeGranularity == 6">
+       		AND statistical_year = #{param.statisticalYear}
+     	</if>
+		GROUP BY warning_level
+  </select>
 </mapper>

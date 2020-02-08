@@ -6,15 +6,24 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cpit.common.db.Page;
 import com.cpit.cpmt.biz.dao.exchange.basic.AlarmInfoDao;
+import com.cpit.cpmt.biz.dao.exchange.basic.BmsInfoDao;
+import com.cpit.cpmt.biz.dao.security.battery.AnaBmsSingleChargeWarningResultDao;
 import com.cpit.cpmt.dto.exchange.basic.AlarmInfo;
+import com.cpit.cpmt.dto.exchange.basic.BmsInfo;
 import com.cpit.cpmt.dto.security.battery.AbnormalAlarmDataMiningConditions;
 import com.cpit.cpmt.dto.security.battery.AbnormalAlarmDataMiningDto;
+import com.cpit.cpmt.dto.security.battery.AnaBmsSingleCharge;
+import com.cpit.cpmt.dto.security.battery.AnaBmsSingleChargeWarningResult;
+import com.cpit.cpmt.dto.security.battery.BatteryWarningAbnormalMonthlyAnalysis;
 
 @Service
 public class AbnormalAlarmDataMiningMgmt {
 	@Autowired AlarmInfoDao alarmInfoDao;
-	
+	@Autowired BmsInfoDao bmsInfoDao;
+	@Autowired AnaBmsSingleChargeWarningResultDao anaBmsSingleChargeWarningResultDao;
+	// 一级钻取:
 	public List<AbnormalAlarmDataMiningDto> queryFirstLevelAbnormalAlarmData(AbnormalAlarmDataMiningConditions param) {
 		//Date startTime = param.getStartTime();
 		//Date endTime = param.getEndTime();
@@ -79,6 +88,33 @@ public class AbnormalAlarmDataMiningMgmt {
 		}else {
 			return list;
 		}
+	}
+	//二级钻取:
+	public List<AlarmInfo> querySecondLevelAbnormalAlarmData(AbnormalAlarmDataMiningConditions param) {
+		return alarmInfoDao.querySecondLevelAbnormalAlarmData(param);
+	}
+	//三级钻取:有问题待定
+	public Page<AlarmInfo> queryThirdLevelAbnormalAlarmData(AbnormalAlarmDataMiningConditions param) {
+		return alarmInfoDao.queryThirdLevelAbnormalAlarmData(param);
+	}
+	//四级钻取:有问题待定
+	
+	//-------------------------动力电池告警分析报告-------------------------------
+	
+	//一、获取电池基本信息
+	public BmsInfo queryBatteryBasicInformation(String bMSCode) {
+		return bmsInfoDao.queryBatteryBasicInformation(bMSCode);
+	}
+	//二、月/季/年度告警次数统计
+	public List<BatteryWarningAbnormalMonthlyAnalysis> queryBatteryAlarmTimesStatistics(
+			AbnormalAlarmDataMiningConditions param) {
+		
+		return anaBmsSingleChargeWarningResultDao.queryBatteryAlarmTimesStatistics(param);
+	}
+	//三、月/季/年度告警等级分布情况
+	public List<BatteryWarningAbnormalMonthlyAnalysis> queryBatteryAlarmLevelDistribution(
+			AbnormalAlarmDataMiningConditions param) {
+		return anaBmsSingleChargeWarningResultDao.queryBatteryAlarmLevelDistribution(param);
 	}
 
 }

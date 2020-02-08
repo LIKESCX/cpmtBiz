@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.cpit.common.MyBatisDao;
+import com.cpit.cpmt.dto.security.battery.AbnormalAlarmDataMiningConditions;
 import com.cpit.cpmt.dto.security.battery.AnaBmsSingleChargeWarningResult;
 import com.cpit.cpmt.dto.security.battery.BatteryDataTrackingAssessmentConditions;
 import com.cpit.cpmt.dto.security.battery.BatteryWarningAbnormalMonthlyAnalysis;
@@ -23,4 +24,8 @@ public interface AnaBmsSingleChargeWarningResultDao {
 	public List<BatteryWarningAbnormalMonthlyAnalysis> queryMonthlyEachWarningLevelTimes(@Param("param")BatteryDataTrackingAssessmentConditions param);
 	public List<BatteryWarningAbnormalMonthlyAnalysis> querySeasonlyEachWarningLevelTimes(@Param("param")BatteryDataTrackingAssessmentConditions param);
 	public List<BatteryWarningAbnormalMonthlyAnalysis> queryYearlyEachWarningLevelTimes(@Param("param")BatteryDataTrackingAssessmentConditions param);
+
+	public List<BatteryWarningAbnormalMonthlyAnalysis> queryBatteryAlarmTimesStatistics(@Param("param")AbnormalAlarmDataMiningConditions param);
+
+	List<BatteryWarningAbnormalMonthlyAnalysis> queryBatteryAlarmLevelDistribution(@Param("param")AbnormalAlarmDataMiningConditions param);
 }

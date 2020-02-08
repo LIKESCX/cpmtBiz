@@ -399,4 +399,13 @@
       and connector_id=#{connectorId}
     </if>
   </select>
+  
+  <select id="queryBatteryBasicInformation" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select 
+  		bms_code,
+  		bms_ver,
+  		rated_capacity
+  	from  exc_bms_info
+  	where  bms_code = #{bMSCode,jdbcType=VARCHAR} and rated_capacity IS NOT NULL LIMIT 1;
+  </select>
 </mapper>

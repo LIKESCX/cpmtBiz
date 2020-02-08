@@ -17,6 +17,7 @@
     <result column="alarm_type" jdbcType="VARCHAR" property="alarmType" />
     <result column="alarmTypeTimes" jdbcType="VARCHAR" property="alarmTypeTimes" />
     <result column="alarm_level" jdbcType="VARCHAR" property="alarmLevel" />
+    <result column="alarmLevelTimes" jdbcType="VARCHAR" property="alarmLevelTimes" />
     <result column="alarm_time" jdbcType="TIMESTAMP" property="alarmTime" />
     <result column="note_string" jdbcType="VARCHAR" property="noteString" />
     <result column="received_time" jdbcType="TIMESTAMP" property="receivedTime" />
@@ -482,5 +483,88 @@
 		</if>
 		GROUP BY alarm_type,statistical_season
 		ORDER BY statistical_season ASC
+  </select>
+    
+  <select id="querySecondLevelAbnormalAlarmData" resultMap="BaseResultMap">
+  	SELECT
+  		alarm_level,
+  		COUNT(alarm_level) AS alarmLevelTimes
+  	FROM  
+  		exc_alarm_info
+  	WHERE
+  			alarm_type = #{param.alarmType}
+  		<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+			AND operator_id = #{param.operatorId}
+		</if>
+		 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+			AND	station_id = #{param.stationId}	
+		</if>
+		<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+			AND equipment_id = #{param.equipmentId}
+		</if>
+		<if test="param.alarmStatus==0 or param.alarmStatus==1"><!-- 告警状态 0-恢复,1-发生,2-全部 -->
+			AND alarm_status = #{param.alarmStatus}
+		</if>
+		<if test="param.timeGranularity == 1">
+       		AND DATE_FORMAT(alarm_time, '%Y-%m-%d %H') = #{param.statisticalHour}
+     	</if>
+		<if test="param.timeGranularity == 2">
+       		AND statistical_day = #{param.statisticalDay}
+     		</if>
+		<if test="param.timeGranularity == 3">
+       		AND statistical_week = #{param.statisticalWeek}
+     		</if>
+		<if test="param.timeGranularity == 4">
+       		AND statistical_month = #{param.statisticalMonth}
+     		</if>
+		<if test="param.timeGranularity == 5">
+       		AND statistical_season = #{param.statisticalSeason}
+     	</if>
+       		GROUP BY alarm_level
+  </select>
+  
+  <select id="queryThirdLevelAbnormalAlarmData" resultMap="BaseResultMap">
+  	SELECT
+  		operator_id,
+	    station_id,
+	    equipment_id,
+	    connector_id,
+	    alarm_status,
+	    alarm_type,
+	    alarm_level,
+	    alarm_time,
+	    note_string
+  	FROM  
+  		exc_alarm_info
+  	WHERE
+  			alarm_level = #{param.alarmLevel}
+  		<if test="param.allOperators==0"><!-- 表明运营商单选 -->
+			AND operator_id = #{param.operatorId}
+		</if>
+		 <if test="param.allStations==0"><!-- 表明充电站单选 -->
+			AND	station_id = #{param.stationId}	
+		</if>
+		<if test="param.allEquipments==0"><!-- 表明充电设备单选 -->
+			AND equipment_id = #{param.equipmentId}
+		</if>
+		<if test="param.alarmStatus==0 or param.alarmStatus==1"><!-- 告警状态 0-恢复,1-发生,2-全部 -->
+			AND alarm_status = #{param.alarmStatus}
+		</if>
+		<if test="param.timeGranularity == 1">
+       		AND DATE_FORMAT(alarm_time, '%Y-%m-%d %H') = #{param.statisticalHour}
+     	</if>
+		<if test="param.timeGranularity == 2">
+       		AND statistical_day = #{param.statisticalDay}
+     		</if>
+		<if test="param.timeGranularity == 3">
+       		AND statistical_week = #{param.statisticalWeek}
+     		</if>
+		<if test="param.timeGranularity == 4">
+       		AND statistical_month = #{param.statisticalMonth}
+     		</if>
+		<if test="param.timeGranularity == 5">
+       		AND statistical_season = #{param.statisticalSeason}
+     	</if>
+     	ORDER BY received_time DESC
   </select>
 </mapper>

@@ -32,4 +32,7 @@ public interface BmsInfoDao {
 
     //bms历史数据信息
     List<BmsInfo> queryBmsHistoryList(EquipmentHistoryInfo equipmentHistoryInfo);
+    
+    //获取电池基本信息
+	BmsInfo queryBatteryBasicInformation(String bMSCode);
 }

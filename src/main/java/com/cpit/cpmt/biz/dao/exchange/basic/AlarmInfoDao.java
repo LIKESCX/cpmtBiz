@@ -41,5 +41,9 @@ public interface AlarmInfoDao {
 	public List<AlarmInfo> queryFirstLevelMonthAbnormalAlarmData(@Param("param")AbnormalAlarmDataMiningConditions param);
 	//异常告警数据挖掘分析 第一级钻取 年份
 	public List<AlarmInfo> queryFirstLevelSeasonAbnormalAlarmData(@Param("param")AbnormalAlarmDataMiningConditions param);
+
+	public List<AlarmInfo> querySecondLevelAbnormalAlarmData(@Param("param")AbnormalAlarmDataMiningConditions param);
+
+	Page<AlarmInfo> queryThirdLevelAbnormalAlarmData(@Param("param")AbnormalAlarmDataMiningConditions param);
 	
 }
