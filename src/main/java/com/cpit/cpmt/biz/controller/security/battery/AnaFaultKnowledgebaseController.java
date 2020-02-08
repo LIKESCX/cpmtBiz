@@ -1,9 +1,13 @@
 package com.cpit.cpmt.biz.controller.security.battery;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.annotation.MultipartConfig;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,18 +17,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cpit.common.SequenceId;
 import com.cpit.common.TimeConvertor;
 import com.cpit.common.db.Page;
 import com.cpit.common.db.PageHelper;
 import com.cpit.cpmt.biz.impl.security.battery.AnaFaultKnowledgebaseMgmt;
 import com.cpit.cpmt.dto.common.ErrorMsg;
 import com.cpit.cpmt.dto.common.ResultInfo;
-import com.cpit.cpmt.dto.security.battery.AnaBmsSingleCharge;
 import com.cpit.cpmt.dto.security.battery.AnaFaultKnowledgebase;
 
 @RestController
 @RequestMapping("/security/battery")
+@MultipartConfig(location="/tmp", fileSizeThreshold=1024*1024, maxFileSize=1024*1024*5, maxRequestSize=1024*1024*5*5)
 public class AnaFaultKnowledgebaseController {
 	private final static Logger logger = LoggerFactory.getLogger(AnaFaultKnowledgebaseController.class);
 	
@@ -74,8 +77,6 @@ public class AnaFaultKnowledgebaseController {
 		logger.debug("addAnaFaultKnowledgebase begin params [{}]", param);
 		try {
 			//test start
-			int baseId = SequenceId.getInstance().getId("anaFaultKnowledgebaseId");
-			param.setBaseId(String.valueOf(baseId));
 			param.setEventName("告警事件");
 			param.setWarningStatus(2);
 			param.setWarningType(1);
@@ -128,6 +129,30 @@ public class AnaFaultKnowledgebaseController {
 		} catch (Exception e) {
 			logger.error("deleteAnaFaultKnowledgebase_error:"+e);
 			return new ResultInfo(ResultInfo.FAIL, new ErrorMsg(ErrorMsg.ERR_SYSTEM_ERROR, e.getMessage()));
+		}
+	}
+	//故障知识库 -- 导入
+	@RequestMapping(value = "/batchAddAnaFaultKnowledgebase")
+	public Object batchAddAnaFaultKnowledgebase(@RequestBody List<Map<String, Object>> anaFaultKnowledgebaseList){
+		try{
+			// test start
+			anaFaultKnowledgebaseList = new ArrayList<Map<String, Object>>();
+			Map<String, Object> map = new HashMap<String,Object>();
+			map.put("eventName", "batch001");
+			map.put("warningStatus", "1");
+			anaFaultKnowledgebaseList.add(map);
+			
+			Map<String, Object> map1 = new HashMap<String,Object>();
+			map1.put("eventName", "batch002");
+			map1.put("warningStatus", "3");
+			
+			anaFaultKnowledgebaseList.add(map1);
+			//test end
+			anaFaultKnowledgebaseMgmt.batchAddAnaFaultKnowledgebase(anaFaultKnowledgebaseList);
+			return new ResultInfo(ResultInfo.OK,null);
+		}catch(Exception e){
+			logger.error("batchAddAnaFaultKnowledgebase_error:", e);
+			return new ResultInfo(ResultInfo.FAIL,new ErrorMsg(ErrorMsg.ERR_SYSTEM_ERROR,e.getMessage()));
 		}
 	}
 }
