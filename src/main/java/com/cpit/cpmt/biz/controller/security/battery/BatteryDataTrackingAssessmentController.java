@@ -39,7 +39,7 @@ public class BatteryDataTrackingAssessmentController {
 	 */
 	@RequestMapping("/queryFirstLevelData")
 	public ResultInfo queryFirstLevelData(@RequestBody BatteryDataTrackingAssessmentConditions param) {
-		logger.info("queryFirstLevelData begin params [{}]", param);
+		logger.debug("queryFirstLevelData begin params [{}]", param);
 		try {
 			//test start
 			Date startTime =TimeConvertor.stringTime2Date("2020-02-03 19:29:40","yyyy-MM-dd HH:mm:ss");
@@ -73,7 +73,7 @@ public class BatteryDataTrackingAssessmentController {
 			@PathVariable("pageNumber") Integer pageNumber,
 			@PathVariable("pageSize") Integer pageSize,
 			@RequestBody BatteryDataTrackingAssessmentConditions param) {
-		logger.info("querySecondLevelData begin params [{}],pageNumber[{}],pageSize[{}]", param,pageNumber,pageSize);
+		logger.debug("querySecondLevelData begin params [{}],pageNumber[{}],pageSize[{}]", param,pageNumber,pageSize);
 		Map<String,Serializable> map = new HashMap<String,Serializable>();
 		Page<AnaBmsSingleCharge> infoList = null;
 		try {
@@ -95,7 +95,7 @@ public class BatteryDataTrackingAssessmentController {
 	        map.put("total", infoList.getTotal());//总记录数
 	        map.put("pages", infoList.getPages());//总页数
 	        map.put("pageNum", infoList.getPageNum());//当前页
-	        logger.info("querySecondLevelData total:" + infoList.getTotal());
+	        logger.debug("querySecondLevelData total:" + infoList.getTotal());
 	        return new ResultInfo(ResultInfo.OK,map);
 		} catch (Exception e) {
 			logger.error("querySecondLevelData_error"+e);
@@ -108,7 +108,7 @@ public class BatteryDataTrackingAssessmentController {
 	 */
 	@RequestMapping("/queryThirdLevelData")
 	public ResultInfo queryThirdLevelData(@RequestBody BatteryDataTrackingAssessmentConditions param) {
-		logger.info("queryThirdLevelData begin params [{}],", param);
+		logger.debug("queryThirdLevelData begin params [{}],", param);
 		try {
 			//test start
 			Date startTime =TimeConvertor.stringTime2Date("2020-02-03 19:29:31","yyyy-MM-dd HH:mm:ss");

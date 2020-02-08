@@ -140,7 +140,7 @@ CREATE TABLE `ana_bms_single_charge_warning_result` (
   KEY `connector_id` (`connector_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='单次充电过程信息异常数据库结果表';
 
-CREATE TABLE `ana_fault_knowledge base` (
+CREATE TABLE `ana_fault_knowledgebase` (
   `base_id` varchar(9) NOT NULL COMMENT '序号id',
   `event_name` varchar(50) NOT NULL COMMENT '事件名称',
   `warning_status` int(2) NOT NULL COMMENT '告警状态 1已处理，2待处理，3无法处理，4其他',
@@ -157,6 +157,8 @@ CREATE TABLE `ana_fault_knowledge base` (
   `appendix` varchar(255) DEFAULT NULL COMMENT '风附件',
   PRIMARY KEY (`base_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='故障知识库表';
+
+INSERT INTO `sys_sequence` VALUES ('anaFaultKnowledgebaseId', '1', '1');
 
 -- 动力电池分析月报告基本信息表
 CREATE TABLE `ana_battery_month_basic_information` (

@@ -30,12 +30,12 @@ public class ExcBatteryTaskController {
 	//1.天
 	@RequestMapping(value="/battery/excBatteryDayTask")
 	public String excBatteryDayTask() {
-        logger.info("excBatteryDayTask_begin");
+        logger.debug("excBatteryDayTask_begin");
         Calendar ca = Calendar.getInstance();
 		ca.add(Calendar.DATE, -1);
 		Date d = ca.getTime();
 		String statisticalDate = TimeConvertor.date2String(d, TimeConvertor.FORMAT_DAY);
-		logger.info("statisticalDate="+statisticalDate);
+		logger.debug("statisticalDate="+statisticalDate);
         try {
         	//先去查原始数据
         	List<AnaBmsDayCharge> list = anaBmsSingleChargeMgmt.querySumAnaBmsSingleDayCharge(statisticalDate);
@@ -55,13 +55,13 @@ public class ExcBatteryTaskController {
 	//2.周 //每周一的凌晨去统计上一周的数据
 	@RequestMapping(value="/battery/excBatteryWeekTask")
 	public String excBatteryWeekTask() {
-		logger.info("excBatteryWeekTask_begin");
+		logger.debug("excBatteryWeekTask_begin");
 		Calendar ca = Calendar.getInstance();
 		ca.add(Calendar.DATE, -1);
 		Date d = ca.getTime();
 		String statisticalWeek = TimeConvertor.date2String(d, TimeConvertor.FORMAT_DAY);
 		statisticalWeek = "20200209";//test
-		logger.info("statisticalWeek="+statisticalWeek);
+		logger.debug("statisticalWeek="+statisticalWeek);
 		try {
 			//先去查原始数据
 			List<AnaBmsWeekCharge> list = anaBmsSingleChargeMgmt.querySumAnaBmsSingleWeekCharge(statisticalWeek);
@@ -80,13 +80,13 @@ public class ExcBatteryTaskController {
 	//3.月
 	@RequestMapping(value="/battery/excBatteryMonthTask")
 	public String excBatteryMonthTask() {
-		logger.info("excBatteryMonthTask_begin");
+		logger.debug("excBatteryMonthTask_begin");
 		Calendar ca = Calendar.getInstance();
 		ca.add(Calendar.DATE, -1);
 		Date d = ca.getTime();
 		String statisticalMonth = TimeConvertor.date2String(d, "yyyyMM");
 		statisticalMonth= "202002";//test
-		logger.info("statisticalMonth="+statisticalMonth);
+		logger.debug("statisticalMonth="+statisticalMonth);
 		try {
 			//先去查原始数据
 			List<AnaBmsMonthCharge> list = anaBmsSingleChargeMgmt.querySumAnaBmsSingleMonthCharge(statisticalMonth);
@@ -105,13 +105,13 @@ public class ExcBatteryTaskController {
 	//4.季度
 	@RequestMapping(value="/battery/excBatterySeasonTask")
 	public String excBatterySeasonTask() {
-		logger.info("excBatterySeasonTask_begin");
+		logger.debug("excBatterySeasonTask_begin");
 		Calendar ca = Calendar.getInstance();
 		ca.add(Calendar.DATE, -1);
 		Date d = ca.getTime();
 		String statisticalSeason = TimeConvertor.date2String(d, TimeConvertor.FORMAT_DAY);
 		statisticalSeason = "202001";//test
-		logger.info("statisticalSeason="+statisticalSeason);
+		logger.debug("statisticalSeason="+statisticalSeason);
 		try {
 			//先去查原始数据
 			List<AnaBmsSeasonCharge> list = anaBmsSingleChargeMgmt.querySumAnaBmsSingleSeasonCharge(statisticalSeason);
@@ -130,13 +130,13 @@ public class ExcBatteryTaskController {
 	//5.年
 	@RequestMapping(value="/battery/excBatteryYearTask")
 	public String excBatteryYearTask() {
-		logger.info("excBatteryYearTask_begin");
+		logger.debug("excBatteryYearTask_begin");
 		Calendar ca = Calendar.getInstance();
 		ca.add(Calendar.DATE, -1);
 		Date d = ca.getTime();
 		String statisticalYear = TimeConvertor.date2String(d, "yyyy");
 		statisticalYear= "202002";//test
-		logger.info("statisticalYear="+statisticalYear);
+		logger.debug("statisticalYear="+statisticalYear);
 		try {
 			//先去查原始数据
 			List<AnaBmsYearCharge> list = anaBmsSingleChargeMgmt.querySumAnaBmsSingleYearCharge(statisticalYear);

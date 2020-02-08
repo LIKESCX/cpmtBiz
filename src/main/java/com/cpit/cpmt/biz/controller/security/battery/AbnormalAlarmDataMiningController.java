@@ -44,7 +44,7 @@ public class AbnormalAlarmDataMiningController {
 	 */
 	@RequestMapping("/queryFirstLevelAbnormalAlarmData")
 	public ResultInfo queryFirstLevelAbnormalAlarmData(@RequestBody AbnormalAlarmDataMiningConditions param) {
-		logger.info("queryFirstLevelAbnormalAlarmData begin params [{}]", param);
+		logger.debug("queryFirstLevelAbnormalAlarmData begin params [{}]", param);
 		try {
 			//test start
 			Date startTime =TimeConvertor.stringTime2Date("2019-05-28 15:10:54","yyyy-MM-dd HH:mm:ss");
@@ -77,7 +77,7 @@ public class AbnormalAlarmDataMiningController {
 	 */
 	@RequestMapping("/querySecondLevelAbnormalAlarmData")
 	public ResultInfo querySecondLevelAbnormalAlarmData(@RequestBody AbnormalAlarmDataMiningConditions param) {
-		logger.info("queryFirstLevelAbnormalAlarmData begin params [{}]", param);
+		logger.debug("queryFirstLevelAbnormalAlarmData begin params [{}]", param);
 		try {
 			//test start
 			//Date startTime =TimeConvertor.stringTime2Date("2019-05-28 15:10:54","yyyy-MM-dd HH:mm:ss");
@@ -130,7 +130,7 @@ public class AbnormalAlarmDataMiningController {
 			@PathVariable("pageNumber") Integer pageNumber,
 			@PathVariable("pageSize") Integer pageSize,
 			@RequestBody AbnormalAlarmDataMiningConditions param) {
-		logger.info("queryThirdLevelAbnormalAlarmData begin params [{}],pageNumber[{}],pageSize[{}]", param,pageNumber,pageSize);
+		logger.debug("queryThirdLevelAbnormalAlarmData begin params [{}],pageNumber[{}],pageSize[{}]", param,pageNumber,pageSize);
 		Map<String,Serializable> map = new HashMap<String,Serializable>();
 		Page<AlarmInfo> infoList = null;
 		try {
@@ -163,7 +163,7 @@ public class AbnormalAlarmDataMiningController {
 	        map.put("total", infoList.getTotal());//总记录数
 	        map.put("pages", infoList.getPages());//总页数
 	        map.put("pageNum", infoList.getPageNum());//当前页
-	        logger.info("queryThirdLevelAbnormalAlarmData total:" + infoList.getTotal());
+	        logger.debug("queryThirdLevelAbnormalAlarmData total:" + infoList.getTotal());
 	        return new ResultInfo(ResultInfo.OK,map);
 		} catch (Exception e) {
 			logger.error("queryThirdLevelAbnormalAlarmData_error"+e);

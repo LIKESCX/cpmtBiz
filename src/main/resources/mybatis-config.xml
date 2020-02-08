@@ -88,6 +88,7 @@
 	    <mapper resource="mappings/security/battery/AnaBmsSeasonChargeDao.xml"/>
 	    <mapper resource="mappings/security/battery/AnaBmsYearChargeDao.xml"/>
 	    <mapper resource="mappings/security/battery/AnaBmsSingleChargeWarningResultDao.xml"/>
+	    <mapper resource="mappings/security/battery/AnaFaultKnowledgebaseDao.xml"/>
 	    <!-- battery end -->
        <!-- security end -->
 		 
@@ -147,7 +148,7 @@
         <mapper resource="mappings/exchange/basic/UncolloectInfoDao.xml" />
         <mapper resource="mappings/exchange/basic/ConnectorChargeInfoDao.xml" />
         <mapper resource="mappings/exchange/basic/ConnectorHistoryPowerInfoDao.xml" />
-         <mapper resource="mappings/exchange/basic/ConnectorOnlineInfoDao.xml" />
+        <mapper resource="mappings/exchange/basic/ConnectorOnlineInfoDao.xml" />
         <!-- operator basic end --> 
 	    <!-- exchange end -->
 	    
